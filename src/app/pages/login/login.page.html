@@ -1,0 +1,45 @@
+<ion-content>
+
+    <ion-slide>
+        <ion-grid fixed>
+            <ion-row>
+                <ion-col>
+                    <ion-header>
+                        <ion-toolbar>
+                            <ion-title>login</ion-title>
+                        </ion-toolbar>
+                    </ion-header>
+
+                </ion-col>
+            </ion-row>
+            <form #formulario="ngForm" (ngSubmit)="onSubmit(formulario)">
+                <ion-row>
+                    <ion-col>
+                        <ion-item>
+                            <ion-icon name="person-outline" class="ion-padding"></ion-icon>
+                            <ion-input type="email" placeholder=" Email" name="email" [(ngModel)]="usuario.username" pattern="^([a-zA-Z0-9_\-\.]+)@([a-zA-Z0-9_\-\.]+)\.([a-zA-Z]{2,5})$" required></ion-input>
+                        </ion-item>
+                        <ion-item>
+                            <ion-icon name="lock-closed-outline" class="ion-padding"></ion-icon>
+                            <ion-input type="password" placeholder=" Contraseña" name="password" [(ngModel)]="usuario.password" required></ion-input>
+                        </ion-item>
+                        <ion-item>
+                            <ion-label>Recordar</ion-label>
+                            <ion-checkbox color="primary" name="recordar" [(ngModel)]="recordarme"></ion-checkbox>
+                        </ion-item>
+
+                    </ion-col>
+                </ion-row>
+                <ion-row>
+                    <ion-col>
+                        <ion-button (click)="ingresar(formulario.valid)" expand="block" shape="round">
+                            Ingresar
+                        </ion-button>
+                    </ion-col>
+                </ion-row>
+            </form>
+        </ion-grid>
+    </ion-slide>
+
+
+</ion-content>

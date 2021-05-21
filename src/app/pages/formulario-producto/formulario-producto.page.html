@@ -1,0 +1,53 @@
+<ion-header class="ion-no-border" translucent>
+    <ion-toolbar>
+
+        <ion-buttons slot="start">
+            <ion-back-button defaultHref="/producto" routerDirection="root" text="Volver" color="primary">
+            </ion-back-button>
+        </ion-buttons>
+
+
+        <ion-title class="ion-text-capitalize">
+            {{ producto.nombre || 'Formulario' }}
+        </ion-title>
+
+        <ion-buttons slot="end">
+            <ion-button *ngIf="!formulario.valid" color="danger" (click)="guardar(formulario.valid)">
+                <ion-icon name="checkmark-outline"></ion-icon>
+            </ion-button>
+            <ion-button *ngIf="formulario.valid" color="success" (click)="guardar(formulario.valid)" routerDirection="root">
+                <ion-icon name="checkmark-outline"></ion-icon>
+            </ion-button>
+        </ion-buttons>
+
+    </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+
+    <form #formulario="ngForm" (ngSubmit)="onSubmit(formulario)">
+
+        <ion-list-header>
+            <ion-label>Formulario válido: {{ formulario.valid }}</ion-label>
+        </ion-list-header>
+
+        <ion-item>
+            <ion-label>Código:</ion-label>
+            <ion-input type="text" placeholder="Codigo" name="codigo" [(ngModel)]="producto.codigo" pattern="^([a-zA-Z0-9_\-\.]{2,10})$" required></ion-input>
+        </ion-item>
+        <ion-item>
+            <ion-label>Nombre:</ion-label>
+            <ion-input type="text" placeholder="Nombre" name="nombre" [(ngModel)]="producto.nombre" pattern="^([a-zA-Z0-9_\-\.]{2,10})$" required></ion-input>
+        </ion-item>
+        <ion-item>
+            <ion-label>Valor:</ion-label>
+            <ion-input type="text" placeholder="Precio" name="precio" [(ngModel)]="producto.precio" pattern="^([0-9\.]{1,11})$" required></ion-input>
+        </ion-item>
+        <ion-item>
+            <ion-label>Vigente:</ion-label>
+            <ion-checkbox type="checkbox" name="vigente" [(ngModel)]="producto.vigente">{{producto.vigente || 'false'}}</ion-checkbox>
+        </ion-item>
+
+    </form>
+
+</ion-content>
