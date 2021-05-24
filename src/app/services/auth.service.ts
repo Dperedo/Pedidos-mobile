@@ -9,8 +9,8 @@ import { ActivatedRoute, Router, Routes } from '@angular/router';
 })
 export class AuthService {
 
-  private url = 'https://localhost:5001/api';
-  // private url = 'https://back-appwebsite.azurewebsites.net/api';
+  //private url = 'https://localhost:5001/api';
+  private url = 'https://back-appwebsite.azurewebsites.net/api';
 
   userToken = '';
   page = '';
@@ -39,7 +39,7 @@ export class AuthService {
     console.log('page=' + page, 'buscar=' + buscar, 'orden=' + orden);
     console.log('Dentro de getDatoBuscar');
 
-    // this.PuedeActivarse();
+    this.PuedeActivarse();
 
     return this.http.get(`${ this.url }/${ controlador }/query?texto=${ buscar }&page=${ page }&order=${ orden }`, { headers })
       .pipe(map((res: any) => res ));
@@ -54,7 +54,7 @@ export class AuthService {
     console.log('ID=' + ID);
     console.log('Dentro de getDatoId');
 
-    // this.PuedeActivarse();
+    this.PuedeActivarse();
 
     return this.http.get(`${ this.url }/${ controlador }/${ ID }`, { headers }).pipe(map((res: any) => res ));
   }
@@ -71,7 +71,7 @@ export class AuthService {
     console.log('Dentro de postDato');
     console.log(Data);
 
-    // this.PuedeActivarse();
+    this.PuedeActivarse();
 
     return this.http.post(`${ this.url }/${ controlador }`, Data, { headers }).pipe(map((res: any) => res));
   }
@@ -88,7 +88,7 @@ export class AuthService {
     console.log('Dentro de putDato');
     console.log(Data);
 
-    // this.PuedeActivarse();
+    this.PuedeActivarse();
 
     return this.http.put(`${ this.url }/${ controlador }/${ Data.id }`, Data, { headers }).pipe(map((res: any) => res));
   }
@@ -172,7 +172,7 @@ export class AuthService {
     const headers = new HttpHeaders({
       Authorization: `Bearer ${ this.userToken }`
     });
-    console.log('123');
+    console.log('estado Del Token');
     this.http.get(`${ this.url }/usuarios`, { headers, observe: 'response' })
     .subscribe(response => {
       console.log('suscrito');

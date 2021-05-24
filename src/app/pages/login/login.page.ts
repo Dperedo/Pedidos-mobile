@@ -4,6 +4,7 @@ import { NgForm } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AlertController } from '@ionic/angular';
 import { AuthService } from 'src/app/services/auth.service';
+import { AppComponent } from '../../app.component';
 
 @Component({
   selector: 'app-login',
@@ -20,6 +21,7 @@ export class LoginPage implements OnInit {
     private alertCtrl: AlertController,
     private auth: AuthService,
     private rutas: Router,
+    private app: AppComponent
   ) {
     if ( localStorage.getItem('token') ) {
       console.log('hay token');
@@ -54,6 +56,7 @@ export class LoginPage implements OnInit {
         localStorage.setItem('username', this.usuario.username);
       } else { localStorage.removeItem('username'); }
       this.rutas.navigate(['/pedido']);
+      this.app.mostrarMenu();
       console.log(resp);
     }, (err) => {
       this.presentIncorrecto();

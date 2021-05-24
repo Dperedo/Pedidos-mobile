@@ -3,7 +3,7 @@ import { FormArray, FormBuilder, FormGroup, Validators, FormControl } from '@ang
 import { ActivatedRoute, Router } from '@angular/router';
 import { AuthService } from 'src/app/services/auth.service';
 import { ProductoModel } from '../../models/producto.model';
-import { AlertController } from '@ionic/angular';
+import { AlertController, LoadingController } from '@ionic/angular';
 
 @Component({
   selector: 'app-producto',
@@ -21,19 +21,28 @@ export class ProductoPage implements OnInit {
   total = 0;
   paginas = 1;
   orden = '';
-  loading: boolean;
+  loading = false;
   producto: ProductoModel = new ProductoModel();
 
   constructor(
     private auth: AuthService,
-    private alertCtrl: AlertController) 
+    private alertCtrl: AlertController,
+    private loadingController: LoadingController,) 
     {
+      this.loading = true;
       this.listadoProducto();
       localStorage.removeItem('id');
      }
 
   ngOnInit() {
   }
+
+  doRefresh( event ) {
+    setTimeout(() => {
+      this.listadoProducto();
+      event.target.complete();
+    }, 1000)
+  }  
 
   listadoProducto() {
     this.loading = true;
@@ -82,6 +91,11 @@ export class ProductoPage implements OnInit {
     });
 
     await alert.present();
+  }
+
+  cancelarBuscar() {
+    this.buscar = '';
+    this.listadoProducto();
   }
 
   editarProducto(id: string) {

@@ -4,7 +4,9 @@ import { AuthService } from '../../services/auth.service';
 import { ClienteModel } from '../../models/cliente.model';
 import { FormArray, FormBuilder, FormGroup, Validators, FormControl } from '@angular/forms';
 
-import { AlertController } from '@ionic/angular';
+import { AlertController, LoadingController, PopoverController } from '@ionic/angular';
+import { HttpClient } from '@angular/common/http';
+import { PopoverInfoComponent } from 'src/app/components/popover-info/popover-info.component';
 
 @Component({
   selector: 'app-cliente',
@@ -21,17 +23,18 @@ export class ClientePage implements OnInit {
   total = 0;
   paginas = 1;
   orden = '';
-  loading: boolean;
+  loading = false;
   // tslint:disable-next-line: new-parens
   cliente: ClienteModel = new ClienteModel();
   
 
   constructor(
     private auth: AuthService,
-    private alertCtrl: AlertController
-    // private fb: FormBuilder,    private router: ActivatedRoute, private routers: Router
+    private alertCtrl: AlertController,
+    public loadingController: LoadingController,
+    private popoverCtrl: PopoverController,
     ) {
-      // console.log('control');
+      this.loading = true;
       this.listadoCliente();
       localStorage.removeItem('id');
      }
@@ -41,20 +44,42 @@ export class ClientePage implements OnInit {
     console.log('inicio');
   }
 
-  listadoCliente() {
+  async presentPopover(ev: any) {
+    
+    const popover = await this.popoverCtrl.create({
+      component: PopoverInfoComponent,
+      event: ev,
+      translucent: true,
+      backdropDismiss: true
+    });
 
+    await popover.present();
+
+    const { data } = await popover.onWillDismiss();
+    if ( data != undefined) {
+      this.orden = data.item;
+    }
+    console.log(data.item);
+    this.listadoCliente();
+
+  }
+
+  doRefresh( event ) {
+    setTimeout(() => {
+      this.listadoCliente();
+      event.target.complete();
+    }, 1000)
+  }  
+
+  listadoCliente() {
+    //this.presentLoading();
     console.log('listadoCliente');
     this.auth.getDato('Clientes', this.buscar, this.page, this.orden).subscribe(
       resp => {
-        // tslint:disable-next-line: no-string-literal
         this.listado = resp['list'];
-        // tslint:disable-next-line: no-string-literal
         this.total = resp['total'];
-        // tslint:disable-next-line: no-string-literal
         this.paginas = resp['numpages'];
         console.log(this.listado);
-        //console.log(this.total);
-        //console.log(this.paginas);
         this.loading = false;
       }
     );
@@ -93,6 +118,11 @@ export class ClientePage implements OnInit {
     });
 
     await alert.present();
+  }
+
+  cancelarBuscar() {
+    this.buscar = '';
+    this.listadoCliente();
   }
 
   editarCliente(id: string) {

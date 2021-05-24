@@ -19,11 +19,23 @@ export class AppComponent {
     { title: 'Spam', url: '/folder/Spam', icon: 'warning' },*/
   ];
 
+  login = false;
+
   constructor(
     private rutas: Router,
     private auth: AuthService,
     private alertCtrl: AlertController
-    ) {}
+    ) {
+      this.mostrarMenu();
+    }
+  
+  mostrarMenu() {
+    if ( this.auth.PuedeActivarse() ) {
+      this.login = true;
+    } else {
+      this.login = false;
+    }
+  }
 
   async presentAlertSalir() {
     const alert = await this.alertCtrl.create({
@@ -42,6 +54,7 @@ export class AppComponent {
             console.log(data);
             this.auth.logout();
             this.rutas.navigate(['/login']);
+            this.mostrarMenu();
           }
         }
       ]

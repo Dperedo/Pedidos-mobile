@@ -9,6 +9,12 @@
 
 <ion-content [fullscreen]="true" class="ion-padding">
 
+    <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
+        <ion-refresher-content></ion-refresher-content>
+    </ion-refresher>
+
+    <ion-progress-bar type="indeterminate" *ngIf="loading"></ion-progress-bar>
+
     <ion-list>
 
         <ion-item-sliding *ngFor="let listados of listado">
@@ -45,13 +51,19 @@
 
     </ion-list>
 
-    <ion-fab vertical="bottom" horizontal="star" slot="fixed" class="ion-padding">
+    <ion-fab vertical="bottom" slot="fixed" horizontal="start">
         <ion-fab-button (click)="presentAlertBuscar()">
             <ion-icon name="search"></ion-icon>
         </ion-fab-button>
+
+        <ion-fab-list side="end">
+            <ion-fab-button color="danger" (click)="cancelarBuscar()">
+                <ion-icon name="backspace"></ion-icon>
+            </ion-fab-button>
+        </ion-fab-list>
     </ion-fab>
 
-    <ion-fab vertical="bottom" horizontal="end" slot="fixed" class="ion-padding">
+    <ion-fab vertical="bottom" horizontal="end" slot="fixed">
         <ion-fab-button (click)="agregarProducto()" routerDirection="root" [routerLink]="'/formulario-producto'">
             <ion-icon name="add"></ion-icon>
         </ion-fab-button>

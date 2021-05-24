@@ -4,10 +4,23 @@
             <ion-menu-button></ion-menu-button>
         </ion-buttons>
         <ion-title>Cliente</ion-title>
+
+        <ion-buttons slot="end">
+            <ion-button (click)="presentPopover( $event )" color="primary">
+                <ion-icon slot="icon-only" name="person-outline"></ion-icon>
+            </ion-button>
+        </ion-buttons>
+
     </ion-toolbar>
 </ion-header>
 
 <ion-content class="ion-padding">
+
+    <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
+        <ion-refresher-content></ion-refresher-content>
+    </ion-refresher>
+
+    <ion-progress-bar type="indeterminate" *ngIf="loading"></ion-progress-bar>
 
     <ion-list>
 
@@ -45,13 +58,19 @@
 
     </ion-list>
 
-    <ion-fab vertical="bottom" horizontal="star" slot="fixed" class="ion-padding">
+    <ion-fab vertical="bottom" slot="fixed" horizontal="start">
         <ion-fab-button (click)="presentAlertBuscar()">
             <ion-icon name="search"></ion-icon>
         </ion-fab-button>
+
+        <ion-fab-list side="end">
+            <ion-fab-button color="danger" (click)="cancelarBuscar()">
+                <ion-icon name="backspace"></ion-icon>
+            </ion-fab-button>
+        </ion-fab-list>
     </ion-fab>
 
-    <ion-fab vertical="bottom" horizontal="end" slot="fixed" class="ion-padding">
+    <ion-fab vertical="bottom" horizontal="end" slot="fixed">
         <ion-fab-button (click)="agregarCliente()" routerDirection="root" [routerLink]="'/formulario-cliente'">
             <ion-icon name="add"></ion-icon>
         </ion-fab-button>

@@ -13,10 +13,10 @@
 
         <ion-buttons slot="end">
             <ion-button *ngIf="!formulario.valid" color="danger" (click)="guardar(formulario.valid)">
-                <ion-icon name="checkmark-outline"></ion-icon>
+                <ion-icon name="send-outline"></ion-icon>
             </ion-button>
             <ion-button *ngIf="formulario.valid" color="success" (click)="guardar(formulario.valid)" routerDirection="root">
-                <ion-icon name="checkmark-outline"></ion-icon>
+                <ion-icon name="send"></ion-icon>
             </ion-button>
         </ion-buttons>
 
@@ -31,18 +31,22 @@
             <ion-label>Formulario válido: {{ formulario.valid }}</ion-label>
         </ion-list-header>
 
-        <ion-item>
-            <ion-label>Razon Social:</ion-label>
-            <ion-input type="text" placeholder="Nombre" name="nombre" [(ngModel)]="cliente.razonSocial" pattern="^([a-zA-Z0-9_\-\.]{2,10})$" required></ion-input>
-        </ion-item>
-        <ion-item>
-            <ion-label>RUT:</ion-label>
-            <ion-input type="text" placeholder="RUT" name="rut" [(ngModel)]="cliente.rut" pattern="^([0-9\-]{9,11})$" required></ion-input>
-        </ion-item>
-        <ion-item>
-            <ion-label>Vigente:</ion-label>
-            <ion-checkbox type="checkbox" name="vigente" [(ngModel)]="cliente.vigente">{{cliente.vigente || 'false'}}</ion-checkbox>
-        </ion-item>
+        <ion-row>
+            <ion-col size-sm="8" offset-sm="2" size-md="6" offset-md="3" size-lg="6" offset-lg="3">
+                <ion-item>
+                    <ion-label>Razon Social:</ion-label>
+                    <ion-input type="text" placeholder="Nombre" name="nombre" [(ngModel)]="cliente.razonSocial" pattern="^([a-zA-Z0-9_\-\.\s]{2,50})$" required></ion-input>
+                </ion-item>
+                <ion-item>
+                    <ion-label>RUT:</ion-label>
+                    <ion-input type="text" placeholder="111111111-1" name="rut" [(ngModel)]="cliente.rut" pattern="^([0-9\-]{10,11})$" required></ion-input>
+                </ion-item>
+                <ion-item>
+                    <ion-label>Vigente:</ion-label>
+                    <ion-checkbox type="checkbox" name="vigente" [(ngModel)]="cliente.vigente">{{cliente.vigente || 'true'}}</ion-checkbox>
+                </ion-item>
+            </ion-col>
+        </ion-row>
 
     </form>
 

@@ -6,7 +6,7 @@ import { AuthService } from 'src/app/services/auth.service';
 import { EstadoModel } from '../../models/estado.model';
 import { ClienteModel } from '../../models/cliente.model';
 import { ProductoModel } from '../../models/producto.model';
-import { AlertController } from '@ionic/angular';
+import { AlertController, LoadingController } from '@ionic/angular';
 
 @Component({
   selector: 'app-pedido',
@@ -31,17 +31,28 @@ export class PedidoPage implements OnInit {
   iva = 0;
   totalvalor = 0;
   subtotal = [];
+  loading = false;
   pedido: PedidoModel = new PedidoModel();
 
   constructor(private auth: AuthService,
-              private alertCtrl: AlertController) 
+              private alertCtrl: AlertController,
+              private loadingController: LoadingController,) 
   {
+    this.loading = true;
     this.listadoPedido();
     localStorage.removeItem('id');
+    // this.doRefresh( event );
    }
 
   ngOnInit() {
   }
+
+  doRefresh( event ) {
+    setTimeout(() => {
+      this.listadoPedido();
+      event.target.complete();
+    }, 1000)
+  }  
 
   listadoPedido() {
 
@@ -52,8 +63,14 @@ export class PedidoPage implements OnInit {
         this.total = resp['total'];
         this.paginas = resp['numpages'];
         console.log(resp);
+        this.loading = false;
       }
     );
+  }
+
+  cancelarBuscar() {
+    this.buscar = '';
+    this.listadoPedido();
   }
 
   async presentAlertBuscar() {

@@ -1,6 +1,6 @@
 <ion-app>
-    <ion-split-pane contentId="main-content">
-        <ion-menu contentId="main-content" type="overlay">
+    <ion-split-pane contentId="main-content" when="md">
+        <ion-menu contentId="main-content" type="overlay" *ngIf="login">
             <ion-content>
                 <ion-list id="inbox-list">
                     <ion-list-header>Pedidos</ion-list-header>
@@ -14,7 +14,7 @@
                         </ion-item>
                     </ion-menu-toggle>
                     <ion-menu-toggle auto-hide="false">
-                        <ion-item routerDirection="root" (click)="presentAlertSalir()" lines="none" detail="false" routerLinkActive="selected">
+                        <ion-item routerDirection="root" (click)="presentAlertSalir()" button lines="none" detail="false" routerLinkActive="">
                             <ion-icon color="danger" slot="start" [ios]="'backspace-outline'" [md]="'backspace-sharp'"></ion-icon>
                             <ion-label color="danger">Cerrar Sesion</ion-label>
                         </ion-item>

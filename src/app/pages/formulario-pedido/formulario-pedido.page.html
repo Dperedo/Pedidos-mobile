@@ -13,10 +13,10 @@
 
         <ion-buttons slot="end">
             <ion-button *ngIf="!formulario.valid" color="danger" (click)="guardar(formulario.valid)">
-                <ion-icon name="checkmark-outline"></ion-icon>
+                <ion-icon name="send-outline"></ion-icon>
             </ion-button>
-            <ion-button *ngIf="formulario.valid && form" color="success" (click)="guardar(formulario.valid)" routerDirection="root">
-                <ion-icon name="checkmark-outline"></ion-icon>
+            <ion-button *ngIf="formulario.valid" color="success" (click)="guardar(formulario.valid)" routerDirection="root">
+                <ion-icon name="send"></ion-icon>
             </ion-button>
         </ion-buttons>
 
@@ -32,80 +32,80 @@
             <ion-label>Formulario válido: {{ formulario.valid }}</ion-label>
         </ion-list-header>
 
-        <ion-item>
-            <ion-label>Cliente</ion-label>
-            <ion-select [interfaceOptions]="clienteOptions" interface="popover" placeholder="Seleccione Cliente" name="cliente" [value]="pedido.cliente" [(ngModel)]="pedido.cliente">
-                <ion-select-option *ngFor="let clientes of clientePedido" value="clientes">{{clientes.razonSocial}}</ion-select-option>
-            </ion-select>
-        </ion-item>
+        <ion-row>
+            <ion-col size-sm="8" offset-sm="2" size-md="6" offset-md="3" size-lg="6" offset-lg="3">
 
-        <ion-item>
-            <ion-label>Pets</ion-label>
-            <ion-select multiple="false" [value]="['bird', 'dog']">
-                <ion-select-option value="bird">Bird</ion-select-option>
-                <ion-select-option value="cat">Cat</ion-select-option>
-                <ion-select-option value="dog">Dog</ion-select-option>
-                <ion-select-option value="honeybadger">Honey Badger</ion-select-option>
-            </ion-select>
-        </ion-item>
-
-        <ion-item>
-            <ion-label>Estado</ion-label>
-            <ion-select [interfaceOptions]="estadoOptions" interface="popover" placeholder="Seleccione Estado" name="estados" [(ngModel)]="pedido.estado">
-                <ion-select-option *ngFor="let estado of estadoPedido" [value]="estado">{{estado.estadoPedido}}</ion-select-option>
-            </ion-select>
-        </ion-item>
-
-        <ion-list>
-            <ion-item-sliding *ngFor="let listados of pedido.detallePedidos; let i = index">
-                <ion-item button>
-
-                    <ion-label>
-                        <h3>{{ listados.producto.nombre }}</h3>
-                        <p> {{ listados.producto.precio }} </p>
-                    </ion-label>
-
-                    <ion-label slot="end" class="ion-text-end text-small">
-                        <h3>Cantidad: {{ listados.cantidad }}</h3>
-                        <h3>Total: {{ tablaSubtotal(i) }}</h3>
-                    </ion-label>
-
+                <ion-item>
+                    <ion-label>Cliente</ion-label>
+                    <ion-select [interfaceOptions]="clienteOptions" interface="popover" placeholder="Seleccione Cliente" name="cliente" [value]="pedido.cliente" [(ngModel)]="pedido.cliente">
+                        <ion-select-option *ngFor="let clientes of clientePedido" value="clientes">{{clientes.razonSocial}}</ion-select-option>
+                    </ion-select>
                 </ion-item>
-            </ion-item-sliding>
-        </ion-list>
 
-        <ion-row>
-            <ion-col>
-                Neto
-            </ion-col>
-            <ion-col>
-                {{neto | currency:'':'symbol-narrow':'.0-0'}}
-            </ion-col>
-        </ion-row>
-        <ion-row>
-            <ion-col>
-                Iva
-            </ion-col>
-            <ion-col>
-                {{iva | currency:'':'symbol-narrow':'.0-0'}}
-            </ion-col>
-        </ion-row>
-        <ion-row>
-            <ion-col>
-                Total
-            </ion-col>
-            <ion-col>
-                {{totalvalor | currency:'':'symbol-narrow':'.0-0'}}
-            </ion-col>
-        </ion-row>
 
-        <ion-item>
-            <ion-textarea name="observable" [(ngModel)]="pedido.observaciones">
-                <h6>Observable</h6>
-            </ion-textarea>
-        </ion-item>
+                <ion-item>
+                    <ion-label>Estado</ion-label>
+                    <ion-select [interfaceOptions]="estadoOptions" interface="popover" placeholder="Seleccione Estado" name="estados" [(ngModel)]="pedido.estado">
+                        <ion-select-option *ngFor="let estado of estadoPedido" [value]="estado">{{estado.estadoPedido}}</ion-select-option>
+                    </ion-select>
+                </ion-item>
+            </ion-col>
+
+            <ion-col size-sm="8" offset-sm="2" size-md="6" offset-md="3" size-lg="6" offset-lg="3">
+
+                <ion-list>
+                    <ion-item-sliding *ngFor="let listados of pedido.detallePedidos; let i = index">
+                        <ion-item button>
+
+                            <ion-label>
+                                <h3>{{ listados.producto.nombre }}</h3>
+                                <p> {{ listados.producto.precio }} </p>
+                            </ion-label>
+
+                            <ion-label slot="end" class="ion-text-end text-small">
+                                <h3>Cantidad: {{ listados.cantidad }}</h3>
+                                <h3>Total: {{ tablaSubtotal(i) }}</h3>
+                            </ion-label>
+
+                        </ion-item>
+                    </ion-item-sliding>
+                </ion-list>
+
+                <ion-row>
+                    <ion-col>
+                        Neto
+                    </ion-col>
+                    <ion-col>
+                        {{neto | currency:'':'symbol-narrow':'.0-0'}}
+                    </ion-col>
+                </ion-row>
+                <ion-row>
+                    <ion-col>
+                        Iva
+                    </ion-col>
+                    <ion-col>
+                        {{iva | currency:'':'symbol-narrow':'.0-0'}}
+                    </ion-col>
+                </ion-row>
+                <ion-row>
+                    <ion-col>
+                        Total
+                    </ion-col>
+                    <ion-col>
+                        {{totalvalor | currency:'':'symbol-narrow':'.0-0'}}
+                    </ion-col>
+                </ion-row>
+
+                <ion-item>
+                    <ion-textarea name="observable" [(ngModel)]="pedido.observaciones">
+                        <h6>Observable</h6>
+                    </ion-textarea>
+                </ion-item>
+            </ion-col>
+        </ion-row>
 
     </form>
+
 
     <ion-fab vertical="bottom" horizontal="end" slot="fixed" class="ion-padding">
         <ion-fab-button (click)="validador()">
