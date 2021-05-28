@@ -28,6 +28,7 @@ export class FormularioPedidoPage implements OnInit {
   neto = 0;
   iva = 0;
   totalvalor = 0;
+  data = false;
 
 
   constructor(
@@ -37,7 +38,7 @@ export class FormularioPedidoPage implements OnInit {
     {
       if( localStorage.getItem('id') ) {
         this.getPedido(localStorage.getItem('id'));
-      }
+      } else {this.data = true;}
       this.allCliente();
       this.allEstado();
       this.allProducto();
@@ -103,6 +104,7 @@ export class FormularioPedidoPage implements OnInit {
       this.titulo = this.pedido.cliente.razonSocial;
       // console.log(this.titulo);
       this.calcularTotal();
+      this.data = true;
     });
   }
 
@@ -202,5 +204,13 @@ export class FormularioPedidoPage implements OnInit {
     // subHeader: 'Select your hair color',
     // message: 'Only select your dominant hair color'
   };
+
+  compareCliente(c1: ClienteModel, c2: ClienteModel) {
+    return c1 && c2 ? c1.id === c2.id : c1 === c2;
+  }
+
+  compareEstado(e1: EstadoModel, e2: EstadoModel) {
+    return e1 && e2 ? e1.id === e2.id : e1 === e2;
+  }
 
 }

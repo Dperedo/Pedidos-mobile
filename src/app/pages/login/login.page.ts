@@ -59,8 +59,25 @@ export class LoginPage implements OnInit {
       this.app.mostrarMenu();
       console.log(resp);
     }, (err) => {
-      this.presentIncorrecto();
+      console.log(err.status);
+      if (err.status === 401) {
+        this.presentIncorrecto();
+      } else if (err.status === 0) {
+        this.presentDesconectado();
+      }
+      
     })
+  }
+
+  async presentDesconectado() {
+    const alert = await this.alertCtrl.create({
+      backdropDismiss: false,
+      header: 'Error Server',
+      message: 'Servidor fuera de servicio.',
+      buttons: ['OK']
+    });
+
+    await alert.present();
   }
 
   async presentIncorrecto() {

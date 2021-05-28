@@ -5,6 +5,7 @@ import { AuthService } from '../../services/auth.service';
 import { AlertController, NavController } from '@ionic/angular';
 import { RouterModule, Router } from '@angular/router';
 import { ClientePage } from '../cliente/cliente.page';
+import { RutService } from 'rut-chileno';
 
 @Component({
   selector: 'app-formulario-cliente',
@@ -18,17 +19,17 @@ export class FormularioClientePage implements OnInit {
   cliente : ClienteModel = new ClienteModel();
   id = '';
   ClientePage: ClientePage;
-  link = {url: '/cliente'}
+  data = false;
+  validarRut: boolean;
 
   constructor(private alertCtrl: AlertController,
               private auth: AuthService,
               private rutas: Router,
-              // private pagCliente: ClientePage
-              // public navCtrl: NavController
+              private rutService: RutService,
               ) {
               if( localStorage.getItem('id') ) {
                 this.getCliente(localStorage.getItem('id'));
-              }
+              } else { this.data = true; }
               }
 
   ngOnInit() {
@@ -48,6 +49,7 @@ export class FormularioClientePage implements OnInit {
       // console.log(this.cliente);
       this.titulo = this.cliente.razonSocial;
       // console.log(this.titulo);
+      this.data = true;
     });
   }
 
@@ -55,9 +57,16 @@ export class FormularioClientePage implements OnInit {
     console.log('guardar cliente');
     console.log(this.cliente);
     console.log(forma);
-    if ( !forma ) {
+    this.validarRut = this.rutService.validaRUT(this.cliente.rut);
+    console.log(this.validarRut);
+    if ( !forma || this.validarRut ) {
       // this.cli.idCliente;
-      this.presentAlert();
+      if(!forma) {
+        this.presentAlertFormulario();
+      } else {
+        this.presentAlertRut();
+      }
+      
       console.log('no');
     } else 
     {
@@ -79,11 +88,22 @@ export class FormularioClientePage implements OnInit {
     }
   }
 
-  async presentAlert() {
+  async presentAlertFormulario() {
     const alert = await this.alertCtrl.create({
       backdropDismiss: false,
       header: 'Error',
       message: 'Completar campos Vacíos.',
+      buttons: ['OK']
+    });
+
+    await alert.present();
+  }
+
+  async presentAlertRut() {
+    const alert = await this.alertCtrl.create({
+      backdropDismiss: false,
+      header: 'Error',
+      message: 'Rut invalido.',
       buttons: ['OK']
     });
 

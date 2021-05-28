@@ -16,6 +16,7 @@ export class FormularioProductoPage implements OnInit {
   titulo: string;
   producto : ProductoModel = new ProductoModel();
   id = '';
+  data = false;
 
   constructor(
     private alertCtrl: AlertController,
@@ -24,7 +25,7 @@ export class FormularioProductoPage implements OnInit {
   ) {
     if( localStorage.getItem('id') ) {
       this.getProducto(localStorage.getItem('id'));
-    }
+    } else {this.data = true;}
     }
 
   ngOnInit() {
@@ -43,6 +44,7 @@ export class FormularioProductoPage implements OnInit {
       this.producto = resp;
       this.titulo = this.producto.nombre;
       console.log(this.producto);
+      this.data = true;
     });
   }
 

@@ -1,9 +1,16 @@
 <ion-header [translucent]="true">
     <ion-toolbar>
-        <ion-buttons slot="start">
+        <ion-buttons slot="start" id="menu">
             <ion-menu-button></ion-menu-button>
         </ion-buttons>
         <ion-title>Producto</ion-title>
+
+        <ion-buttons slot="end" id="ordenar">
+            <ion-button (click)="presentPopover( $event )" color="primary">
+                <ion-icon slot="icon-only" name="funnel-outline"></ion-icon>
+            </ion-button>
+        </ion-buttons>
+
     </ion-toolbar>
 </ion-header>
 
@@ -38,7 +45,7 @@
 
             </ion-item>
 
-            <ion-item-options side="end">
+            <ion-item-options side="end" id="vigente">
                 <ion-item-option color="primary" (click)="presentAlertVigente(listados)" *ngIf="!listados.vigente">
                     <ion-icon slot="icon-only" name="checkmark-outline"></ion-icon>
                 </ion-item-option>
@@ -52,19 +59,19 @@
     </ion-list>
 
     <ion-fab vertical="bottom" slot="fixed" horizontal="start">
-        <ion-fab-button (click)="presentAlertBuscar()">
+        <ion-fab-button (click)="presentAlertBuscar()" id="fabBuscar">
             <ion-icon name="search"></ion-icon>
         </ion-fab-button>
 
         <ion-fab-list side="end">
-            <ion-fab-button color="danger" (click)="cancelarBuscar()">
+            <ion-fab-button color="danger" (click)="cancelarBuscar()" id="fabBuscarCancelar">
                 <ion-icon name="backspace"></ion-icon>
             </ion-fab-button>
         </ion-fab-list>
     </ion-fab>
 
     <ion-fab vertical="bottom" horizontal="end" slot="fixed">
-        <ion-fab-button (click)="agregarProducto()" routerDirection="root" [routerLink]="'/formulario-producto'">
+        <ion-fab-button (click)="agregarProducto()" routerDirection="root" [routerLink]="'/formulario-producto'" id="fabAgregar">
             <ion-icon name="add"></ion-icon>
         </ion-fab-button>
     </ion-fab>

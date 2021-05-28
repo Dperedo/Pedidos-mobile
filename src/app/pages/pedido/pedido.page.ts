@@ -6,7 +6,8 @@ import { AuthService } from 'src/app/services/auth.service';
 import { EstadoModel } from '../../models/estado.model';
 import { ClienteModel } from '../../models/cliente.model';
 import { ProductoModel } from '../../models/producto.model';
-import { AlertController, LoadingController } from '@ionic/angular';
+import { AlertController, LoadingController, PopoverController } from '@ionic/angular';
+import { PopoverPedidoComponent } from 'src/app/components/popover-pedido/popover-pedido.component';
 
 @Component({
   selector: 'app-pedido',
@@ -36,15 +37,39 @@ export class PedidoPage implements OnInit {
 
   constructor(private auth: AuthService,
               private alertCtrl: AlertController,
-              private loadingController: LoadingController,) 
+              private loadingController: LoadingController,
+              private popoverCtrl: PopoverController,) 
   {
     this.loading = true;
     this.listadoPedido();
     localStorage.removeItem('id');
+    localStorage.removeItem('orden');
     // this.doRefresh( event );
    }
 
   ngOnInit() {
+  }
+
+  async presentPopover(ev: any) {
+    
+    const popover = await this.popoverCtrl.create({
+      component: PopoverPedidoComponent,
+      event: ev,
+      translucent: true,
+      backdropDismiss: false
+    });
+
+    await popover.present();
+
+    const { data } = await popover.onWillDismiss();
+    if ( data != undefined) {
+      this.orden = data.item;
+    }
+    this.loading = true;
+    localStorage.setItem('orden', this.orden);
+    console.log(data.item);
+    this.listadoPedido();
+
   }
 
   doRefresh( event ) {

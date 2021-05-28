@@ -1,0 +1,43 @@
+<ion-list>
+
+    <ion-item button *ngIf="orden!='FechaDeCreacionAcending'" (click)="ordenBy('FechaDeCreacionAcending')">
+        <ion-label>Fecha de creación</ion-label>
+        <ion-icon name="chevron-down-outline" *ngIf="orden=='FechaDeCreacionDescending'"></ion-icon>
+    </ion-item>
+    <ion-item button *ngIf="orden=='FechaDeCreacionAcending'" (click)="ordenBy('FechaDeCreacionDescending')">
+        <ion-label>Fecha de creación</ion-label>
+        <ion-icon name="chevron-up-outline" *ngIf="orden=='FechaDeCreacionAcending'"></ion-icon>
+    </ion-item>
+
+
+    <ion-item button *ngIf="orden!='ClienteAcending'" (click)="ordenBy('ClienteAcending')">
+        <ion-label>Cliente</ion-label>
+        <ion-icon name="chevron-down-outline" *ngIf="orden=='ClienteDescending'"></ion-icon>
+    </ion-item>
+    <ion-item button *ngIf="orden=='ClienteAcending'" (click)="ordenBy('ClienteDescending')">
+        <ion-label>Cliente</ion-label>
+        <ion-icon name="chevron-up-outline" *ngIf="orden=='ClienteAcending'"></ion-icon>
+    </ion-item>
+
+
+    <ion-item button *ngIf="orden!='TotalAcending'" (click)="ordenBy('TotalAcending')">
+        <ion-label>Total</ion-label>
+        <ion-icon name="chevron-down-outline" *ngIf="orden=='TotalDescending'"></ion-icon>
+    </ion-item>
+    <ion-item button *ngIf="orden=='TotalAcending'" (click)="ordenBy('TotalDescending')">
+        <ion-label>Total</ion-label>
+        <ion-icon name="chevron-up-outline" *ngIf="orden=='TotalAcending'"></ion-icon>
+    </ion-item>
+
+
+    <ion-item button *ngIf="orden!='EstadoAcending'" (click)="ordenBy('EstadoAcending')">
+        <ion-label>Estado</ion-label>
+        <ion-icon name="chevron-down-outline" *ngIf="orden=='EstadoDescending'"></ion-icon>
+    </ion-item>
+    <ion-item button *ngIf="orden=='EstadoAcending'" (click)="ordenBy('EstadoDescending')">
+        <ion-label>Estado</ion-label>
+        <ion-icon name="chevron-up-outline" *ngIf="orden=='EstadoAcending'"></ion-icon>
+    </ion-item>
+
+
+</ion-list>

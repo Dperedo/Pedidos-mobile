@@ -18,6 +18,7 @@ export class PopoverInfoComponent implements OnInit {
     //private cliente: ClientePage
     ) { 
       //console.log(this.cliente.orden);
+      this.orden = localStorage.getItem('orden');
     }
 
   ngOnInit() {}

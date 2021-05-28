@@ -37,11 +37,12 @@ export class ClientePage implements OnInit {
       this.loading = true;
       this.listadoCliente();
       localStorage.removeItem('id');
+      localStorage.removeItem('orden');
      }
 
     
   ngOnInit() {
-    console.log('inicio');
+    console.log('fin');
   }
 
   async presentPopover(ev: any) {
@@ -50,7 +51,7 @@ export class ClientePage implements OnInit {
       component: PopoverInfoComponent,
       event: ev,
       translucent: true,
-      backdropDismiss: true
+      backdropDismiss: false
     });
 
     await popover.present();
@@ -59,6 +60,8 @@ export class ClientePage implements OnInit {
     if ( data != undefined) {
       this.orden = data.item;
     }
+    this.loading = true;
+    localStorage.setItem('orden', this.orden);
     console.log(data.item);
     this.listadoCliente();
 

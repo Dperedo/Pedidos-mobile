@@ -3,7 +3,8 @@ import { FormArray, FormBuilder, FormGroup, Validators, FormControl } from '@ang
 import { ActivatedRoute, Router } from '@angular/router';
 import { AuthService } from 'src/app/services/auth.service';
 import { ProductoModel } from '../../models/producto.model';
-import { AlertController, LoadingController } from '@ionic/angular';
+import { AlertController, LoadingController, PopoverController } from '@ionic/angular';
+import { PopoverProductoComponent } from 'src/app/components/popover-producto/popover-producto.component';
 
 @Component({
   selector: 'app-producto',
@@ -27,14 +28,39 @@ export class ProductoPage implements OnInit {
   constructor(
     private auth: AuthService,
     private alertCtrl: AlertController,
-    private loadingController: LoadingController,) 
+    private loadingController: LoadingController,
+    private popoverCtrl: PopoverController,
+    ) 
     {
       this.loading = true;
       this.listadoProducto();
       localStorage.removeItem('id');
+      localStorage.removeItem('orden');
      }
 
   ngOnInit() {
+  }
+
+  async presentPopover(ev: any) {
+    
+    const popover = await this.popoverCtrl.create({
+      component: PopoverProductoComponent,
+      event: ev,
+      translucent: true,
+      backdropDismiss: false
+    });
+
+    await popover.present();
+
+    const { data } = await popover.onWillDismiss();
+    if ( data != undefined) {
+      this.orden = data.item;
+    }
+    this.loading = true;
+    localStorage.setItem('orden', this.orden);
+    console.log(data.item);
+    this.listadoProducto();
+
   }
 
   doRefresh( event ) {

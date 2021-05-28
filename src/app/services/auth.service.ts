@@ -3,6 +3,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { UsuarioModel } from '../models/usuario.model';
 import { map } from 'rxjs/operators';
 import { ActivatedRoute, Router, Routes } from '@angular/router';
+import { AlertController } from '@ionic/angular';
 
 @Injectable({
   providedIn: 'root'
@@ -19,7 +20,8 @@ export class AuthService {
   usuario: UsuarioModel = { username: 'test@test.com' , password: '1234'}
 
   constructor(private http: HttpClient, 
-              private rutas: Router ) {
+              private rutas: Router,
+              private alertCtrl: AlertController, ) {
                 // this.login(this.usuario).subscribe( resp => console.log(resp));
                }
 
@@ -172,20 +174,20 @@ export class AuthService {
     const headers = new HttpHeaders({
       Authorization: `Bearer ${ this.userToken }`
     });
+
     console.log('estado Del Token');
     this.http.get(`${ this.url }/usuarios`, { headers, observe: 'response' })
     .subscribe(response => {
       console.log('suscrito');
       console.log(response.status);
-      // if ( !(response.status >= 200 || response.status <= 299) ){
-      //   console.log(response.status + 'hola');
-      //   this.respuesta = false;
-      // }
     },
-    err => {
+    (err) => {
       console.log('HTTP Error', err.status);
       // this.ruta.navigateByUrl('/login');
       this.logout();
+      if (err.status === 0) {
+        this.presentDesconectado();
+      }
     });
     console.log('fuera del suscrito ' + this.respuesta);
     
@@ -213,6 +215,25 @@ export class AuthService {
       this.logout();
       return false;
     }
+  }
+
+  async presentDesconectado() {
+    const alert = await this.alertCtrl.create({
+      backdropDismiss: false,
+      header: 'Error Server',
+      message: 'Servidor fuera de servicio.',
+      buttons: [
+        {
+          text: 'Ok',
+          handler: ( data:any ) => {
+            console.log(data);
+            this.rutas.navigate(['/login']);
+          }
+        }
+      ]
+    });
+
+    await alert.present();
   }
 
 }

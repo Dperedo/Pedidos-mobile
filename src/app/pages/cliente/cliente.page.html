@@ -1,13 +1,13 @@
 <ion-header [translucent]="true">
     <ion-toolbar>
-        <ion-buttons slot="start">
+        <ion-buttons slot="start" id="menu">
             <ion-menu-button></ion-menu-button>
         </ion-buttons>
         <ion-title>Cliente</ion-title>
 
-        <ion-buttons slot="end">
+        <ion-buttons slot="end" id="ordenar">
             <ion-button (click)="presentPopover( $event )" color="primary">
-                <ion-icon slot="icon-only" name="person-outline"></ion-icon>
+                <ion-icon slot="icon-only" name="funnel-outline"></ion-icon>
             </ion-button>
         </ion-buttons>
 
@@ -35,17 +35,17 @@
 
                 <ion-label slot="end" class="ion-text-end text-small">
                     <h3>{{ listados.fechaDeCreacion | date:'dd/MM/yyyy' }}</h3>
-                    <p *ngIf="listados.vigente">Vigente:
+                    <p *ngIf="listados.vigente ">Vigente:
                         <ion-icon name="checkmark-outline"></ion-icon>
                     </p>
-                    <p *ngIf="!listados.vigente">Vigente:
+                    <p *ngIf="!listados.vigente ">Vigente:
                         <ion-icon name="close-outline"></ion-icon>
                     </p>
                 </ion-label>
 
             </ion-item>
 
-            <ion-item-options side="end">
+            <ion-item-options side="end" id="vigente">
                 <ion-item-option color="primary" (click)="presentAlertVigente(listados)" *ngIf="!listados.vigente">
                     <ion-icon slot="icon-only" name="checkmark-outline"></ion-icon>
                 </ion-item-option>
@@ -59,19 +59,19 @@
     </ion-list>
 
     <ion-fab vertical="bottom" slot="fixed" horizontal="start">
-        <ion-fab-button (click)="presentAlertBuscar()">
+        <ion-fab-button (click)="presentAlertBuscar()" id="fabBuscar">
             <ion-icon name="search"></ion-icon>
         </ion-fab-button>
 
         <ion-fab-list side="end">
-            <ion-fab-button color="danger" (click)="cancelarBuscar()">
+            <ion-fab-button color="danger" (click)="cancelarBuscar()" id="fabBuscarCancelar">
                 <ion-icon name="backspace"></ion-icon>
             </ion-fab-button>
         </ion-fab-list>
     </ion-fab>
 
     <ion-fab vertical="bottom" horizontal="end" slot="fixed">
-        <ion-fab-button (click)="agregarCliente()" routerDirection="root" [routerLink]="'/formulario-cliente'">
+        <ion-fab-button (click)="agregarCliente()" routerDirection="root" [routerLink]=" '/formulario-cliente'" id="fabAgregar">
             <ion-icon name="add"></ion-icon>
         </ion-fab-button>
     </ion-fab>
