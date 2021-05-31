@@ -43,7 +43,7 @@ export class AuthService {
 
     this.PuedeActivarse();
 
-    return this.http.get(`${ this.url }/${ controlador }/query?texto=${ buscar }&page=${ page }&order=${ orden }`, { headers })
+    return this.http.get(`${ this.url }/${ controlador }/query?texto=${ buscar }&page=${ page }&order=${ orden }&take=${ 100 }`, { headers })
       .pipe(map((res: any) => res ));
   }
 

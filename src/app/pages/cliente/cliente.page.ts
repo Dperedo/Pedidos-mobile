@@ -158,7 +158,7 @@ export class ClientePage implements OnInit {
 
   async presentAlertVigente(cliente: any) {
     const alert = await this.alertCtrl.create({
-      header: 'Esta seguro de completar esta accion',
+      header: '¿Está seguro de completar esta accción?',
       buttons: [
         {
           text: 'Cancel',

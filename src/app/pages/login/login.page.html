@@ -1,11 +1,16 @@
 <ion-content>
+
+    <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
+        <ion-refresher-content></ion-refresher-content>
+    </ion-refresher>
+
     <ion-slide>
         <ion-grid fixed>
             <ion-row>
                 <ion-col size-sm="8" offset-sm="2" size-md="6" offset-md="3" size-lg="4" offset-lg="4">
                     <ion-header>
                         <ion-toolbar>
-                            <ion-title>login</ion-title>
+                            <ion-title>Inicie sesión</ion-title>
                         </ion-toolbar>
                     </ion-header>
 
@@ -26,6 +31,8 @@
                             <ion-label>Recordar</ion-label>
                             <ion-checkbox color="primary" name="recordar" [(ngModel)]="recordarme"></ion-checkbox>
                         </ion-item>
+
+                        <ion-progress-bar type="indeterminate" *ngIf="loading"></ion-progress-bar>
 
                     </ion-col>
                 </ion-row>

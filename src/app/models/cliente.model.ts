@@ -3,5 +3,5 @@ export class ClienteModel {
     rut: string;
     razonSocial: string;
     fechaDeCreacion: string;
-    vigente: boolean;
+    vigente = true;
 }

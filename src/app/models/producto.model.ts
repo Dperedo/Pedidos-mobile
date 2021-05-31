@@ -4,5 +4,5 @@ export class ProductoModel {
     codigo: string;
     nombre: string;
     precio: number;
-    vigente: boolean;
+    vigente = true;
 }

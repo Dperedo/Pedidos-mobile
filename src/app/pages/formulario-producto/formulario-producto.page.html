@@ -40,11 +40,11 @@
 
                 <ion-item>
                     <ion-label>Código:</ion-label>
-                    <ion-input type="text" placeholder="Codigo" name="codigo" [(ngModel)]="producto.codigo" pattern="^([a-zA-Z0-9_\-\.]{2,10})$" required id="codigo"></ion-input>
+                    <ion-input type="text" placeholder="XXXXX" name="codigo" [(ngModel)]="producto.codigo" pattern="^([a-zA-Z0-9_\-\.]{2,10})$" required id="codigo"></ion-input>
                 </ion-item>
                 <ion-item>
                     <ion-label>Nombre:</ion-label>
-                    <ion-input type="text" placeholder="Nombre" name="nombre" [(ngModel)]="producto.nombre" pattern="^([a-zA-Z0-9_\-\.\s]{2,50})$" required id="nombre"></ion-input>
+                    <ion-input type="text" placeholder="Nombre" name="nombre" [(ngModel)]="producto.nombre" pattern="^([a-zA-ZñÑáéíóúÁÉÍÓÚ0-9_\-\.\s]{2,50})$" required id="nombre"></ion-input>
                 </ion-item>
                 <ion-item>
                     <ion-label>Valor:</ion-label>

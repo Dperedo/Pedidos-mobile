@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { ProductoModel } from '../../models/producto.model';
-import { AlertController } from '@ionic/angular';
+import { AlertController, NavController } from '@ionic/angular';
 import { AuthService } from '../../services/auth.service';
 import { Router } from '@angular/router';
 
@@ -22,6 +22,7 @@ export class FormularioProductoPage implements OnInit {
     private alertCtrl: AlertController,
     private auth: AuthService,
     private rutas: Router,
+    private navCtlr: NavController,
   ) {
     if( localStorage.getItem('id') ) {
       this.getProducto(localStorage.getItem('id'));
@@ -64,13 +65,13 @@ export class FormularioProductoPage implements OnInit {
         this.auth.putDato('Productos', this.producto).subscribe( resp => {
           console.log(resp);
           console.log('ok');
-          this.rutas.navigate(['/producto']);
+          this.navCtlr.navigateRoot(['/producto']);
         });
       } else {
         console.log('Nuevo Producto');
         this.auth.postDato(this.producto, 'Productos').subscribe( resp => {
           console.log(resp);
-          this.rutas.navigate(['/producto']);
+          this.navCtlr.navigateRoot(['/producto']);
         });
       }
     }

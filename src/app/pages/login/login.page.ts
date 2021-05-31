@@ -16,6 +16,7 @@ export class LoginPage implements OnInit {
   usuario : UsuarioModel = new UsuarioModel();
   formulario: any;
   recordarme = false;
+  loading = false;
 
   constructor(
     private alertCtrl: AlertController,
@@ -37,6 +38,16 @@ export class LoginPage implements OnInit {
     }
   }
 
+  doRefresh( event ) {
+    setTimeout(() => {
+      if ( localStorage.getItem('token') ) {
+        console.log('hay token');
+        this.rutas.navigate(['/pedido']);
+      }
+      event.target.complete();
+    }, 1000)
+  } 
+
   onSubmit(formulario: NgForm) {
     console.log('formulario');
     console.log(this.usuario);
@@ -46,8 +57,16 @@ export class LoginPage implements OnInit {
   }
 
   ingresar(formulario: boolean) {
+    this.loading = true;
     console.log(formulario);
-    if ( !formulario ) { return; }
+    console.log(this.usuario.username);
+    console.log(this.usuario.password);
+    if ( !formulario ) {
+      this.loading = false;
+      if (this.usuario.username == undefined || this.usuario.username == '') {this.presentEmail()}
+      else {this.presentPass()}
+      return;
+     }
 
     console.log(this.usuario);
 
@@ -55,11 +74,13 @@ export class LoginPage implements OnInit {
       if ( this.recordarme ) {
         localStorage.setItem('username', this.usuario.username);
       } else { localStorage.removeItem('username'); }
+      this.loading = false;
       this.rutas.navigate(['/pedido']);
       this.app.mostrarMenu();
       console.log(resp);
     }, (err) => {
       console.log(err.status);
+      this.loading = false;
       if (err.status === 401) {
         this.presentIncorrecto();
       } else if (err.status === 0) {
@@ -84,7 +105,28 @@ export class LoginPage implements OnInit {
     const alert = await this.alertCtrl.create({
       backdropDismiss: false,
       header: 'Error',
-      message: 'Usuario y/o contraseña son incorrectos.',
+      message: 'Correo y/o contraseña son incorrectos.',
+      buttons: ['OK']
+    });
+
+    await alert.present();
+  }
+
+  async presentEmail() {
+    const alert = await this.alertCtrl.create({
+      backdropDismiss: false,
+      message: 'No ingreso correo electrónico.',
+      buttons: ['OK']
+    });
+
+    await alert.present();
+  }
+
+  async presentPass() {
+    const alert = await this.alertCtrl.create({
+      backdropDismiss: false,
+      header: 'Error',
+      message: 'No ingreso contraseña.',
       buttons: ['OK']
     });
 

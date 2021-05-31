@@ -29,12 +29,12 @@
 
             <ion-item button (click)="editarPedido(listados.id)" routerDirection="root" [routerLink]="'/formulario-pedido'">
                 <ion-label>
-                    <h3>{{ listados.cliente.razonSocial }}</h3>
+                    <h3>N°: {{ listados.secuencial }}</h3>
                     <p> {{ listados.fechaDeCreacion | date:'dd/MM/yy'}} </p>
                 </ion-label>
 
                 <ion-label slot="end" class="ion-text-end text-small">
-                    <h3>{{ listados.total | currency:'':'':'.0-0'}}</h3>
+                    <h3>{{ listados.total | currency:'':'symbol-narrow':'.0-0'}}</h3>
                     <p>{{listados.estado.estadoPedido}}</p>
                 </ion-label>
 

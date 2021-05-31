@@ -5,7 +5,8 @@ import { AuthService } from '../../services/auth.service';
 import { AlertController, NavController } from '@ionic/angular';
 import { RouterModule, Router } from '@angular/router';
 import { ClientePage } from '../cliente/cliente.page';
-import { RutService } from 'rut-chileno';
+import { validateRut } from '@fdograph/rut-utilities';
+//import { RutService } from 'rut-chileno';
 
 @Component({
   selector: 'app-formulario-cliente',
@@ -25,7 +26,7 @@ export class FormularioClientePage implements OnInit {
   constructor(private alertCtrl: AlertController,
               private auth: AuthService,
               private rutas: Router,
-              private rutService: RutService,
+              private navCtlr: NavController,
               ) {
               if( localStorage.getItem('id') ) {
                 this.getCliente(localStorage.getItem('id'));
@@ -57,9 +58,10 @@ export class FormularioClientePage implements OnInit {
     console.log('guardar cliente');
     console.log(this.cliente);
     console.log(forma);
-    this.validarRut = this.rutService.validaRUT(this.cliente.rut);
+    this.validarRut = validateRut(this.cliente.rut);
+    //this.validarRut = this.rutService.validaRUT(this.cliente.rut);
     console.log(this.validarRut);
-    if ( !forma || this.validarRut ) {
+    if ( !forma || !this.validarRut ) {
       // this.cli.idCliente;
       if(!forma) {
         this.presentAlertFormulario();
@@ -76,13 +78,15 @@ export class FormularioClientePage implements OnInit {
         this.auth.putDato('Clientes', this.cliente).subscribe( resp => {
           console.log(resp);
           console.log('ok');
-          this.rutas.navigate(['/cliente']);
+          this.navCtlr.navigateRoot(['/cliente']);
+          //this.rutas.navigate(['/cliente']);
+          //this.cliente = new ClienteModel();
         });
       } else {
         console.log('Nuevo Cliente');
         this.auth.postDato(this.cliente, 'Clientes').subscribe( resp => {
           console.log(resp);
-          this.rutas.navigate(['/cliente']);
+          this.navCtlr.navigateRoot(['/cliente']);
         });
       }
     }

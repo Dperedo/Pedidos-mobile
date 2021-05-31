@@ -30,11 +30,11 @@
 
                 <ion-label>
                     <h3>{{ listados.nombre }}</h3>
-                    <p> {{ listados.codigo }} </p>
+                    <p>Código: {{ listados.codigo }} </p>
                 </ion-label>
 
                 <ion-label slot="end" class="ion-text-end text-small">
-                    <h3>{{ listados.precio | currency:'':'':'.0-0'}}</h3>
+                    <h3>{{ listados.precio | currency:'':'symbol-narrow':'.0-0':''}}</h3>
                     <p *ngIf="listados.vigente">Vigente:
                         <ion-icon name="checkmark-outline"></ion-icon>
                     </p>

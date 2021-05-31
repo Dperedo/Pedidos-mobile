@@ -1,12 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { Router } from '@angular/router';
-import { AlertController } from '@ionic/angular';
+import { AlertController, NavController } from '@ionic/angular';
 import { ClienteModel } from 'src/app/models/cliente.model';
 import { EstadoModel } from 'src/app/models/estado.model';
 import { AuthService } from 'src/app/services/auth.service';
 import { PedidoModel } from '../../models/pedido.model';
 import { ProductoModel } from '../../models/producto.model';
+import { DetallePedidoModel } from '../../models/detallePedido.model';
 
 @Component({
   selector: 'app-formulario-pedido',
@@ -17,9 +18,12 @@ export class FormularioPedidoPage implements OnInit {
 
   formulario: any;
   form = false;
-  titulo : string;
+  titulo : any;
   total = 0;
   pedido : PedidoModel = new PedidoModel();
+  producto : ProductoModel = new ProductoModel();
+  detalle : DetallePedidoModel = new DetallePedidoModel();
+  cantidad: number;
   clientePedido : ClienteModel[] = [];
   productoPedido : ProductoModel[] = [];
   estadoPedido : EstadoModel[] = [];
@@ -28,17 +32,24 @@ export class FormularioPedidoPage implements OnInit {
   neto = 0;
   iva = 0;
   totalvalor = 0;
+  dT = -1;
   data = false;
+  agregar = false;
 
 
   constructor(
     private alertCtrl: AlertController,
     private auth: AuthService,
-    private rutas: Router,) 
+    private rutas: Router,
+    private navCtlr: NavController,
+    ) 
     {
       if( localStorage.getItem('id') ) {
         this.getPedido(localStorage.getItem('id'));
-      } else {this.data = true;}
+      } else {
+        this.data = true;
+        this.agregar = true;
+      }
       this.allCliente();
       this.allEstado();
       this.allProducto();
@@ -48,12 +59,23 @@ export class FormularioPedidoPage implements OnInit {
   ngOnInit() {
   }
 
+  editarCerrar() {
+    this.dT = -1;
+    console.log(this.dT);
+  }
+
   onSubmit(formulario: NgForm) {
     console.log('formulario');
     console.log(this.pedido);
     console.log(formulario);
     this.formulario = formulario;
     console.log(this.formulario);
+  }
+
+  editarProducto(i: number) {
+    console.log('numero de editar: '+i);
+    this.dT = i;
+
   }
 
   validador() {
@@ -101,7 +123,7 @@ export class FormularioPedidoPage implements OnInit {
     this.auth.getDatoId('Pedidos', Id).subscribe( resp => {
       this.pedido = resp;
       // console.log(this.cliente);
-      this.titulo = this.pedido.cliente.razonSocial;
+      this.titulo = this.pedido.secuencial;
       // console.log(this.titulo);
       this.calcularTotal();
       this.data = true;
@@ -146,13 +168,13 @@ export class FormularioPedidoPage implements OnInit {
         this.auth.putDato('Pedidos', this.pedido).subscribe( resp => {
           console.log(resp);
           console.log('ok');
-          this.rutas.navigate(['/pedido']);
+          this.navCtlr.navigateRoot(['/pedido']);
         });
       } else {
         console.log('Nuevo Pedido');
         this.auth.postDato(this.pedido, 'Pedidos').subscribe( resp => {
           console.log(resp);
-          this.rutas.navigate(['/pedido']);
+          this.navCtlr.navigateRoot(['/pedido']);
         });
       }
     }
@@ -169,28 +191,27 @@ export class FormularioPedidoPage implements OnInit {
     await alert.present();
   }
 
-  /*agregarDetalle() {
-    let alert = this.alertCtrl.create();
-    alert.setTitle('Lightsaber color');
-// setTitle
-    alert.addInput({
-      type: 'radio',
-      label: 'Blue',
-      value: 'blue',
-      checked: true
-    });
+  agregarDetalle() {
+    this.agregar = true;
+  }
 
-    alert.addButton('Cancel');
-    alert.addButton({
-      text: 'OK',
-      handler: data => {
-        // this.testRadioOpen = false;
-        // this.testRadioResult = data;
-      }
-    });
-    alert.present();
-  }*/
+  guardarDetalle() {
+    console.log(this.detalle);
+    this.pedido.detallePedidos.push(this.detalle);
+    this.agregar = false;
+  }
 
+  cancelarDetalle() {
+    this.detalle = new DetallePedidoModel();
+    this.agregar = false;
+  }
+
+  eliminarDetalle(i: number) {
+    //console.log('eliminar: '+detalle);
+    //let index = this.pedido.detallePedidos.indexOf(detalle);
+    console.log(i);
+    this.pedido.detallePedidos.splice(i,1);
+  }
   // ------------------------
 
   clienteOptions: any = {
@@ -205,12 +226,22 @@ export class FormularioPedidoPage implements OnInit {
     // message: 'Only select your dominant hair color'
   };
 
+  productoOptions: any = {
+    header: 'Seleccione un Producto',
+    // subHeader: 'Select your hair color',
+    // message: 'Only select your dominant hair color'
+  };
+
   compareCliente(c1: ClienteModel, c2: ClienteModel) {
     return c1 && c2 ? c1.id === c2.id : c1 === c2;
   }
 
   compareEstado(e1: EstadoModel, e2: EstadoModel) {
     return e1 && e2 ? e1.id === e2.id : e1 === e2;
+  }
+
+  compareProducto(p1: ProductoModel, p2: ProductoModel) {
+    return p1 && p2 ? p1.id === p2.id : p1 === p2;
   }
 
 }

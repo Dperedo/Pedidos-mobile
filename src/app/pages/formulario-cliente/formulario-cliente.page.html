@@ -39,15 +39,15 @@
             <ion-col size-sm="8" offset-sm="2" size-md="6" offset-md="3" size-lg="6" offset-lg="3">
                 <ion-item>
                     <ion-label>Razon Social:</ion-label>
-                    <ion-input type="text" placeholder="Nombre" name="nombre" [(ngModel)]="cliente.razonSocial" pattern="^([a-zA-Z0-9_\-\.\s]{2,50})$" required id="razonSocial"></ion-input>
+                    <ion-input type="text" placeholder="Nombre" name="nombre" [(ngModel)]="cliente.razonSocial" pattern="^([a-zA-ZñÑáéíóúÁÉÍÓÚ0-9_\-\.\s]{2,50})$" required id="razonSocial"></ion-input>
                 </ion-item>
                 <ion-item>
                     <ion-label>RUT:</ion-label>
-                    <ion-input type="text" placeholder="111111111-1" name="rut" [(ngModel)]="cliente.rut" pattern="^([0-9\-]{10,11})$" required id="rut"></ion-input>
+                    <ion-input type="text" placeholder="11111111-1" name="rut" [(ngModel)]="cliente.rut" pattern="^([0-9\-]{9,11})$" required id="rut"></ion-input>
                 </ion-item>
                 <ion-item>
                     <ion-label>Vigente:</ion-label>
-                    <ion-checkbox type="checkbox" name="vigente" [(ngModel)]="cliente.vigente" id="vigente">{{cliente.vigente || 'true'}}</ion-checkbox>
+                    <ion-checkbox type="checkbox" name="vigente" [(ngModel)]="cliente.vigente" id="vigente"></ion-checkbox>
                 </ion-item>
             </ion-col>
         </ion-row>
