@@ -67,15 +67,15 @@
 
                             <ion-label>
                                 <h3>{{ listados.producto.nombre }}</h3>
-                                <p> {{ listados.producto.precio | currency:'CLP':'symbol-narrow':'.0-0' }} </p>
+                                <p>${{ listados.producto.precio | moneda }} </p>
                             </ion-label>
 
                             <ion-label slot="end" class="ion-text-end text-small">
                                 <h3>Cantidad: {{ listados.cantidad }}</h3>
-                                <h3>Total: {{ tablaSubtotal(i) }}</h3>
+                                <h3>Total: ${{ tablaSubtotal(i) | moneda}}</h3>
                             </ion-label>
 
-                            <ion-button slot="end" color="danger" (click)="eliminarDetalle(i)" fill="clear">
+                            <ion-button slot="end" color="danger" (click)="eliminarDetalle(i)" fill="clear" (blur)="calcularTotal()">
                                 <ion-icon slot="icon-only" name="close"></ion-icon>
                             </ion-button>
 
@@ -93,7 +93,7 @@
                             <ion-label>cantidad</ion-label>
                             <ion-input type="text" placeholder="cantidad" name="cantidad" [(ngModel)]="pedido.detallePedidos[dT].cantidad" pattern="^([0-9\.]{1,6})$" id="cantidad"></ion-input>
 
-                            <ion-button side="end" color="danger" (click)="editarCerrar()" fill="clear">
+                            <ion-button side="end" color="danger" (click)="editarCerrar()" fill="clear" (blur)="calcularTotal()">
                                 <ion-icon name="close"></ion-icon>
                             </ion-button>
                         </ion-item>
@@ -114,10 +114,10 @@
                     <ion-label>cantidad</ion-label>
                     <ion-input type="text" placeholder="0" name="cantidad" [(ngModel)]="detalle.cantidad" pattern="^([0-9\.]{1,6})$" id="cantidad"></ion-input>
 
-                    <ion-button side="end" color="danger" (click)="cancelarDetalle()" fill="clear" *ngIf="pedido.detallePedidos">
+                    <ion-button side="end" color="danger" (click)="cancelarDetalle()" fill="clear" *ngIf="pedido.detallePedidos" (blur)="calcularTotal()">
                         <ion-icon name="close"></ion-icon>
                     </ion-button>
-                    <ion-button side="end" color="success" (click)="guardarDetalle()" fill="clear">
+                    <ion-button side="end" color="success" (click)="guardarDetalle()" fill="clear" (blur)="calcularTotal()">
                         <ion-icon name="checkmark"></ion-icon>
                     </ion-button>
                 </ion-item>
@@ -131,7 +131,7 @@
                         Neto
                     </ion-col>
                     <ion-col>
-                        {{neto | currency:'':'symbol-narrow':'.0-0'}}
+                        ${{neto | moneda}}
                     </ion-col>
                 </ion-row>
                 <ion-row>
@@ -139,7 +139,7 @@
                         Iva
                     </ion-col>
                     <ion-col>
-                        {{iva | currency:'':'symbol-narrow':'.0-0'}}
+                        ${{iva | moneda}}
                     </ion-col>
                 </ion-row>
                 <ion-row>
@@ -147,7 +147,7 @@
                         Total
                     </ion-col>
                     <ion-col>
-                        {{totalvalor | currency:'':'symbol-narrow':'.0-0'}}
+                        ${{totalvalor | moneda}}
                     </ion-col>
                 </ion-row>
 

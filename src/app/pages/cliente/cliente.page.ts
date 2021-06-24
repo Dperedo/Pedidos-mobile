@@ -1,10 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router, Routes, RouterModule } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
 import { ClienteModel } from '../../models/cliente.model';
 import { FormArray, FormBuilder, FormGroup, Validators, FormControl } from '@angular/forms';
 
-import { AlertController, LoadingController, PopoverController } from '@ionic/angular';
+import { AlertController, IonInfiniteScroll, LoadingController, PopoverController } from '@ionic/angular';
 import { HttpClient } from '@angular/common/http';
 import { PopoverInfoComponent } from 'src/app/components/popover-info/popover-info.component';
 
@@ -17,6 +17,7 @@ export class ClientePage implements OnInit {
 
   forma: FormGroup;
   listado: ClienteModel[] = [];
+  data: ClienteModel[] = [];
   formulario = false;
   buscar = '';
   page = '1';
@@ -24,8 +25,8 @@ export class ClientePage implements OnInit {
   paginas = 1;
   orden = '';
   loading = false;
-  // tslint:disable-next-line: new-parens
   cliente: ClienteModel = new ClienteModel();
+  @ViewChild( IonInfiniteScroll ) inifiteScroll: IonInfiniteScroll;
   
 
   constructor(
@@ -43,6 +44,32 @@ export class ClientePage implements OnInit {
     
   ngOnInit() {
     console.log('fin');
+  }
+  
+  loadData( event ) {
+    console.log(event);
+
+    setTimeout(() => {
+
+      if ( this.listado.length >= this.total ) {
+        console.log('todos los elementos');
+        this.inifiteScroll.complete();
+        this.inifiteScroll.disabled = true;
+        return;
+      }
+      const dato = parseInt(this.page) + 1;
+      this.page = dato.toString();
+      console.log(this.page);
+      this.listadoCliente();
+      this.inifiteScroll.complete();
+      /*console.log('despues del complete');
+      if ( this.listado.length == this.total ) {
+        console.log('todos los elementos2');
+        //this.inifiteScroll.complete();
+        this.inifiteScroll.disabled = true;
+        return;
+      }*/
+    }, 1500);
   }
 
   async presentPopover(ev: any) {
@@ -79,8 +106,14 @@ export class ClientePage implements OnInit {
     console.log('listadoCliente');
     this.auth.getDato('Clientes', this.buscar, this.page, this.orden).subscribe(
       resp => {
-        this.listado = resp['list'];
+        if(this.page != '1'){
+          this.listado.push( ...resp['list'] )
+        } else {
+          this.listado = resp['list'];
+        }
+        //this.listado = resp['list'];
         this.total = resp['total'];
+        console.log(this.total);
         this.paginas = resp['numpages'];
         console.log(this.listado);
         this.loading = false;
@@ -154,6 +187,16 @@ export class ClientePage implements OnInit {
       console.log('ok');
     });
 
+  }
+
+  eliminarCliente(id: string, i: number) {
+    this.auth.deleteDato('Clientes', id).subscribe( resp => {
+      console.log(resp);
+      console.log('ok');
+      this.listado.splice(i,1);
+      this.total = this.total-1;
+      //console.log(this.total);
+    });
   }
 
   async presentAlertVigente(cliente: any) {

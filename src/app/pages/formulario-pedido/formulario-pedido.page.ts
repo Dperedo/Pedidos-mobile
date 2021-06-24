@@ -37,22 +37,22 @@ export class FormularioPedidoPage implements OnInit {
   agregar = false;
 
 
-  constructor(
+  constructor( 
     private alertCtrl: AlertController,
     private auth: AuthService,
     private rutas: Router,
     private navCtlr: NavController,
     ) 
     {
+      this.allCliente();
+      this.allEstado();
+      this.allProducto();
       if( localStorage.getItem('id') ) {
         this.getPedido(localStorage.getItem('id'));
       } else {
         this.data = true;
         this.agregar = true;
       }
-      this.allCliente();
-      this.allEstado();
-      this.allProducto();
       // this.calcularTotal();
     }
 
@@ -126,7 +126,10 @@ export class FormularioPedidoPage implements OnInit {
       this.titulo = this.pedido.secuencial;
       // console.log(this.titulo);
       this.calcularTotal();
-      this.data = true;
+      //this.data = true;
+      setTimeout(() => {
+        this.data = true;
+      }, 500)
     });
   }
 
@@ -145,9 +148,10 @@ export class FormularioPedidoPage implements OnInit {
   }
 
   allEstado() {
-    this.auth.getSelector('Estados').subscribe( resp => {
+    this.auth.getSelectorEstado('Estados').subscribe( resp => {
       this.estadoPedido = resp;
-      // console.log(this.estadoPedido);
+      this.pedido.estado = this.estadoPedido[0];
+      console.log(this.estadoPedido);
     });
   }
 
@@ -161,7 +165,7 @@ export class FormularioPedidoPage implements OnInit {
       console.log('no');
     } else 
     {
-      this.pedido.total = this.totalvalor
+      this.pedido.total = this.totalvalor;
       console.log('guarda');
       if ( this.pedido.id ) {
         console.log('Modificando: ' + this.pedido.id);
@@ -197,7 +201,19 @@ export class FormularioPedidoPage implements OnInit {
 
   guardarDetalle() {
     console.log(this.detalle);
-    this.pedido.detallePedidos.push(this.detalle);
+    if ( !this.detalle.producto || !this.detalle.cantidad ) {
+      this.presentAlert();
+      return;
+    }
+    if( !this.pedido.detallePedidos ) {
+      console.log('no hay detalle');
+      this.pedido.detallePedidos = [];  
+    }
+    let num = this.pedido.detallePedidos.length;
+    console.log(num);
+    this.pedido.detallePedidos.push();
+    this.pedido.detallePedidos[num] = this.detalle;
+    this.detalle = new DetallePedidoModel();
     this.agregar = false;
   }
 

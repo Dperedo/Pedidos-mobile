@@ -3,7 +3,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { UsuarioModel } from '../models/usuario.model';
 import { map } from 'rxjs/operators';
 import { ActivatedRoute, Router, Routes } from '@angular/router';
-import { AlertController } from '@ionic/angular';
+import { AlertController, NavController } from '@ionic/angular';
 
 @Injectable({
   providedIn: 'root'
@@ -21,7 +21,8 @@ export class AuthService {
 
   constructor(private http: HttpClient, 
               private rutas: Router,
-              private alertCtrl: AlertController, ) {
+              private alertCtrl: AlertController,
+              private navCtlr: NavController, ) {
                 // this.login(this.usuario).subscribe( resp => console.log(resp));
                }
 
@@ -43,7 +44,7 @@ export class AuthService {
 
     this.PuedeActivarse();
 
-    return this.http.get(`${ this.url }/${ controlador }/query?texto=${ buscar }&page=${ page }&order=${ orden }&take=${ 100 }`, { headers })
+    return this.http.get(`${ this.url }/${ controlador }/query?texto=${ buscar }&page=${ page }&order=${ orden }&take=${ 15 }`, { headers })
       .pipe(map((res: any) => res ));
   }
 
@@ -95,6 +96,20 @@ export class AuthService {
     return this.http.put(`${ this.url }/${ controlador }/${ Data.id }`, Data, { headers }).pipe(map((res: any) => res));
   }
 
+  deleteDato(controlador: string, id: string){
+    this.userToken = this.leerToken();
+
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${ this.userToken }`
+    });
+    console.log('Dentro de deleteDato');
+    console.log(id);
+
+    this.PuedeActivarse();
+
+    return this.http.delete(`${ this.url }/${ controlador }/${ id }`, { headers }).pipe(map((res: any) => res));
+  }
+
   getSelector(controlador: string){
     // const url = 'https://localhost:5001/api/Usuarios';
     this.userToken = this.leerToken();
@@ -102,6 +117,19 @@ export class AuthService {
     const headers = new HttpHeaders({
       Authorization: `Bearer ${ this.userToken }`
     });
+
+    // console.log('Dentro de Selector');
+    return this.http.get(`${ this.url }/${ controlador }/vigente`, { headers }).pipe(map((res: any) => res));
+  }
+
+  getSelectorEstado(controlador: string){
+    // const url = 'https://localhost:5001/api/Usuarios';
+    this.userToken = this.leerToken();
+
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${ this.userToken }`
+    });
+
     // console.log('Dentro de Selector');
     return this.http.get(`${ this.url }/${ controlador }`, { headers }).pipe(map((res: any) => res));
   }
@@ -211,7 +239,7 @@ export class AuthService {
       return true;
     } else {
       console.log('no ok');
-      this.rutas.navigate(['/login']);
+      this.navCtlr.navigateRoot(['/login']);
       this.logout();
       return false;
     }
@@ -227,7 +255,7 @@ export class AuthService {
           text: 'Ok',
           handler: ( data:any ) => {
             console.log(data);
-            this.rutas.navigate(['/login']);
+            this.navCtlr.navigateRoot(['/login']);
           }
         }
       ]

@@ -24,7 +24,7 @@
 
     <ion-list>
 
-        <ion-item-sliding *ngFor="let listados of listado">
+        <ion-item-sliding *ngFor="let listados of listado; let i = index">
 
             <ion-item button (click)="editarProducto(listados.id)" routerDirection="root" [routerLink]="'/formulario-producto'">
 
@@ -34,7 +34,7 @@
                 </ion-label>
 
                 <ion-label slot="end" class="ion-text-end text-small">
-                    <h3>{{ listados.precio | currency:'':'symbol-narrow':'.0-0':''}}</h3>
+                    <h3>$ {{ listados.precio | moneda}}</h3>
                     <p *ngIf="listados.vigente">Vigente:
                         <ion-icon name="checkmark-outline"></ion-icon>
                     </p>
@@ -52,11 +52,19 @@
                 <ion-item-option color="danger" (click)="presentAlertVigente(listados)" *ngIf="listados.vigente">
                     <ion-icon slot="icon-only" name="close-outline"></ion-icon>
                 </ion-item-option>
+                <ion-item-option color="danger" (click)="eliminarProducto(listados.id,i)">
+                    <ion-icon slot="icon-only" name="trash"></ion-icon>
+                </ion-item-option>
             </ion-item-options>
 
         </ion-item-sliding>
 
     </ion-list>
+
+    <ion-infinite-scroll threshold="20px" (ionInfinite)="loadData($event)">
+        <ion-infinite-scroll-content loadingSpinner="bubbles" loadingText="Cargando más datos...">
+        </ion-infinite-scroll-content>
+    </ion-infinite-scroll>
 
     <ion-fab vertical="bottom" slot="fixed" horizontal="start">
         <ion-fab-button (click)="presentAlertBuscar()" id="fabBuscar">

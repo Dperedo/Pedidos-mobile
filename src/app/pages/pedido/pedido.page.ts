@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { PedidoModel } from '../../models/pedido.model';
 import { FormArray, FormBuilder, FormGroup, Validators, FormControl } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -6,7 +6,7 @@ import { AuthService } from 'src/app/services/auth.service';
 import { EstadoModel } from '../../models/estado.model';
 import { ClienteModel } from '../../models/cliente.model';
 import { ProductoModel } from '../../models/producto.model';
-import { AlertController, LoadingController, PopoverController } from '@ionic/angular';
+import { AlertController, IonList, LoadingController, PopoverController, IonInfiniteScroll } from '@ionic/angular';
 import { PopoverPedidoComponent } from 'src/app/components/popover-pedido/popover-pedido.component';
 
 @Component({
@@ -34,6 +34,10 @@ export class PedidoPage implements OnInit {
   subtotal = [];
   loading = false;
   pedido: PedidoModel = new PedidoModel();
+  estado: EstadoModel = new EstadoModel();
+
+  @ViewChild(IonList) ionList: IonList;
+  @ViewChild( IonInfiniteScroll ) inifiteScroll: IonInfiniteScroll;
 
   constructor(private auth: AuthService,
               private alertCtrl: AlertController,
@@ -48,6 +52,25 @@ export class PedidoPage implements OnInit {
    }
 
   ngOnInit() {
+  }
+
+  loadData( event ) {
+    console.log(event);
+
+    setTimeout(() => {
+
+      if ( this.listado.length >= this.total ) {
+        console.log('todos los elementos');
+        this.inifiteScroll.complete();
+        this.inifiteScroll.disabled = true;
+        return;
+      }
+      const dato = parseInt(this.page) + 1;
+      this.page = dato.toString();
+      console.log(this.page);
+      this.listadoPedido();
+      this.inifiteScroll.complete();
+    }, 1500);
   }
 
   async presentPopover(ev: any) {
@@ -79,18 +102,42 @@ export class PedidoPage implements OnInit {
     }, 1000)
   }  
 
+  getEstadoCancelado(pedido: any) {
+    this.auth.getDatoId('Estados','23d381c6-2718-4540-b409-95c713eb75e3').subscribe(
+      resp => {
+        pedido.estado = resp;
+        console.log('estado cancelado');
+        this.guardar(pedido);
+        this.ionList.closeSlidingItems();
+      }
+    );
+  }
+
   listadoPedido() {
 
     console.log('listadoPedido');
     this.auth.getDato('Pedidos', this.buscar, this.page, this.orden).subscribe(
       resp => {
-        this.listado = resp['list'];
+        if(this.page != '1'){
+          this.listado.push( ...resp['list'] )
+        } else {
+          this.listado = resp['list'];
+        }
         this.total = resp['total'];
         this.paginas = resp['numpages'];
         console.log(resp);
         this.loading = false;
       }
     );
+  }
+
+  guardar(pedido: any) {
+    console.log('guardar');
+    console.log(pedido);
+    this.auth.putDato('Pedidos', pedido).subscribe( resp => {
+      console.log(resp);
+      console.log('ok');
+    });
   }
 
   cancelarBuscar() {
@@ -140,5 +187,21 @@ export class PedidoPage implements OnInit {
   agregarPedido() {
     localStorage.removeItem('id');
   }
+
+  eliminarPedido(id: string, i: number) {
+    this.auth.deleteDato('Pedidos', id).subscribe( resp => {
+      console.log(resp);
+      console.log('ok');
+      this.listado.splice(i,1);
+      this.total = this.total-1;
+    });
+  }
+
+  /*cambiarEstadoPedido(id: string) {
+    this.auth.putDato('Pedidos', id).subscribe( resp => {
+      console.log('cancelado');
+      this.ionList.closeSlidingItems();
+    });
+  }*/
 
 }

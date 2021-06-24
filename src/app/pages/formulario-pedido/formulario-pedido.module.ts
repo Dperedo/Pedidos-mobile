@@ -7,13 +7,15 @@ import { IonicModule } from '@ionic/angular';
 import { FormularioPedidoPageRoutingModule } from './formulario-pedido-routing.module';
 
 import { FormularioPedidoPage } from './formulario-pedido.page';
+import { PipesModule } from '../../pipes/pipes.module';
 
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
     IonicModule,
-    FormularioPedidoPageRoutingModule
+    FormularioPedidoPageRoutingModule,
+    PipesModule
   ],
   declarations: [FormularioPedidoPage]
 })

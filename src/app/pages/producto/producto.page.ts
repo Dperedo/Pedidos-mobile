@@ -1,9 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, Validators, FormControl } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AuthService } from 'src/app/services/auth.service';
 import { ProductoModel } from '../../models/producto.model';
-import { AlertController, LoadingController, PopoverController } from '@ionic/angular';
+import { AlertController, LoadingController, PopoverController, IonInfiniteScroll } from '@ionic/angular';
 import { PopoverProductoComponent } from 'src/app/components/popover-producto/popover-producto.component';
 
 @Component({
@@ -24,6 +24,7 @@ export class ProductoPage implements OnInit {
   orden = '';
   loading = false;
   producto: ProductoModel = new ProductoModel();
+  @ViewChild( IonInfiniteScroll ) inifiteScroll: IonInfiniteScroll;
 
   constructor(
     private auth: AuthService,
@@ -39,6 +40,25 @@ export class ProductoPage implements OnInit {
      }
 
   ngOnInit() {
+  }
+
+  loadData( event ) {
+    console.log(event);
+
+    setTimeout(() => {
+
+      if ( this.listado.length >= this.total ) {
+        console.log('todos los elementos');
+        this.inifiteScroll.complete();
+        this.inifiteScroll.disabled = true;
+        return;
+      }
+      const dato = parseInt(this.page) + 1;
+      this.page = dato.toString();
+      console.log(this.page);
+      this.listadoProducto();
+      this.inifiteScroll.complete();
+    }, 1500);
   }
 
   async presentPopover(ev: any) {
@@ -75,7 +95,11 @@ export class ProductoPage implements OnInit {
     console.log('listadoProducto');
     this.auth.getDato('Productos', this.buscar, this.page, this.orden).subscribe(
       resp => {
-        this.listado = resp['list'];
+        if(this.page != '1'){
+          this.listado.push( ...resp['list'] )
+        } else {
+          this.listado = resp['list'];
+        }
         this.total = resp['total'];
         this.paginas = resp['numpages'];
         console.log(resp);
@@ -150,6 +174,15 @@ export class ProductoPage implements OnInit {
       console.log('ok');
     });
 
+  }
+
+  eliminarProducto(id: string, i: number) {
+    this.auth.deleteDato('Productos', id).subscribe( resp => {
+      console.log(resp);
+      console.log('ok');
+      this.listado.splice(i,1);
+      this.total = this.total-1;
+    });
   }
 
   async presentAlertVigente(producto: any) {

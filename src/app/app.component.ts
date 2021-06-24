@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
-import { AlertController } from '@ionic/angular';
+import { AlertController, MenuController, NavController } from '@ionic/angular';
 import { AuthService } from './services/auth.service';
 @Component({
   selector: 'app-root',
@@ -9,9 +9,9 @@ import { AuthService } from './services/auth.service';
 })
 export class AppComponent {
   public appPages = [
-    { title: 'Pedido', url: '/pedido', icon: 'mail' },
-    { title: 'Cliente', url: '/cliente', icon: 'paper-plane' },
-    { title: 'Producto', url: '/producto', icon: 'archive' },
+    { title: 'Pedido', url: '/pedido', icon: 'bag' },
+    { title: 'Cliente', url: '/cliente', icon: 'person-circle' },
+    { title: 'Producto', url: '/producto', icon: 'cube' },
     // { title: 'Cerrar Sesion', url: '/login', icon: 'backspace' },
     /*{ title: 'Favorites', url: '/folder/Favorites', icon: 'heart' },
     { title: 'Archived', url: '/folder/Archived', icon: 'archive' },
@@ -24,7 +24,9 @@ export class AppComponent {
   constructor(
     private rutas: Router,
     private auth: AuthService,
-    private alertCtrl: AlertController
+    private alertCtrl: AlertController,
+    private menuCtrl: MenuController,
+    private navCtlr: NavController,
     ) {
       this.mostrarMenu();
     }
@@ -32,8 +34,20 @@ export class AppComponent {
   mostrarMenu() {
     if ( this.auth.PuedeActivarse() ) {
       this.login = true;
+      //this.menuCtrl.isOpen();
+      //this.menuCtrl.enable(true, 'authenticated');
     } else {
       this.login = false;
+      //this.menuCtrl.close();
+      //this.menuCtrl.isEnabled();
+    }
+  }
+
+  mostrarM() {
+    if ( this.auth.PuedeActivarse() ) {
+      return false;
+    } else {
+      return true;
     }
   }
 
@@ -53,8 +67,9 @@ export class AppComponent {
           handler: ( data:any ) => {
             console.log(data);
             this.auth.logout();
-            this.rutas.navigate(['/login']);
             this.mostrarMenu();
+            this.navCtlr.navigateRoot(['/login']);
+            //this.mostrarMenu();
           }
         }
       ]
