@@ -24,8 +24,6 @@ export class AuthService {
               private rutas: Router,
               private alertCtrl: AlertController,
               private navCtlr: NavController, ) {
-                // this.login(this.usuario).subscribe( resp => console.log(resp));
-                //this.url2 = this.getMenuOpts().subscribe(resp => resp);
                 console.log(this.url2);
                 console.log('url');
               }
@@ -41,7 +39,6 @@ export class AuthService {
       page = '';
     }
 
-    // tslint:disable-next-line: radix
     console.log('Primer paso');
 
     const headers = new HttpHeaders({
