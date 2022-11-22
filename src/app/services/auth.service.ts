@@ -13,6 +13,7 @@ export class AuthService {
   //private url = 'https://localhost:5001/api';
   private url = 'https://back-appwebsite.azurewebsites.net/api';
 
+  url2: any;
   userToken = '';
   page = '';
   buscar = '';
@@ -24,7 +25,14 @@ export class AuthService {
               private alertCtrl: AlertController,
               private navCtlr: NavController, ) {
                 // this.login(this.usuario).subscribe( resp => console.log(resp));
-               }
+                //this.url2 = this.getMenuOpts().subscribe(resp => resp);
+                console.log(this.url2);
+                console.log('url');
+              }
+
+  getMenuOpts() {
+    return this.http.get<any>('/assets/data/configure-url.json');
+  }
 
   getDato(controlador: string, buscar: string, page: string, orden: string) {
     this.userToken = this.leerToken();
@@ -38,7 +46,7 @@ export class AuthService {
 
     const headers = new HttpHeaders({
       Authorization: `Bearer ${ this.userToken }`
-    });
+    });  
     console.log('page=' + page, 'buscar=' + buscar, 'orden=' + orden);
     console.log('Dentro de getDatoBuscar');
 

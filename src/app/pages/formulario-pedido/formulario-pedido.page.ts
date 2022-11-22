@@ -150,7 +150,7 @@ export class FormularioPedidoPage implements OnInit {
   allEstado() {
     this.auth.getSelectorEstado('Estados').subscribe( resp => {
       this.estadoPedido = resp;
-      this.pedido.estado = this.estadoPedido[0];
+      this.pedido.estado = this.estadoPedido[2];
       console.log(this.estadoPedido);
     });
   }
