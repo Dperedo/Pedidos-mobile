@@ -1,0 +1,185 @@
+<ion-header class="ion-no-border" translucent>
+    <ion-toolbar>
+
+        <ion-buttons slot="start" id="volver">
+            <ion-back-button defaultHref="/pedido" routerDirection="root" text="Volver" color="primary">
+            </ion-back-button>
+        </ion-buttons>
+
+
+        <ion-title *ngIf="data" class="ion-text-capitalize">
+            {{ titulo || 'Formulario' }}
+        </ion-title>
+
+        <ion-title *ngIf="!data" class="ion-text-capitalize">
+            <ion-skeleton-text animated style="width: 150px; height:25px"></ion-skeleton-text>
+        </ion-title>
+
+        <ion-buttons slot="end" id="guardar">
+            <ion-button *ngIf="!formulario.valid" color="danger" (click)="guardar(formulario.valid)">
+                <ion-icon name="send-outline"></ion-icon>
+            </ion-button>
+            <ion-button *ngIf="formulario.valid" color="success" (click)="guardar(formulario.valid)" routerDirection="root">
+                <ion-icon name="send"></ion-icon>
+            </ion-button>
+        </ion-buttons>
+
+    </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+
+
+    <form #formulario="ngForm" (ngSubmit)="onSubmit(formulario)">
+
+        <ion-list-header>
+            <ion-label>Formulario válido: {{ formulario.valid }}</ion-label>
+        </ion-list-header>
+
+        <ion-row *ngIf="data">
+            <ion-col size-sm="8" offset-sm="2" size-md="6" offset-md="3" size-lg="6" offset-lg="3">
+
+                <ion-item>
+                    <ion-label>Cliente</ion-label>
+                    <ion-select [interfaceOptions]="clienteOptions" interface="popover" [compareWith]="compareCliente" placeholder="Seleccione Cliente" name="cliente" [(ngModel)]="pedido.cliente" id="cliente">
+                        <ion-select-option *ngFor="let clientes of clientePedido" [value]="clientes">{{clientes.razonSocial}}</ion-select-option>
+                    </ion-select>
+                </ion-item>
+
+
+                <ion-item>
+                    <ion-label>Estado</ion-label>
+                    <ion-select [interfaceOptions]="estadoOptions" interface="popover" [compareWith]="compareEstado" placeholder="Seleccione Estado" name="estados" [(ngModel)]="pedido.estado" id="estado">
+                        <ion-select-option *ngFor="let estados of estadoPedido" [value]="estados">{{estados.estadoPedido}}</ion-select-option>
+                    </ion-select>
+                </ion-item>
+            </ion-col>
+
+            <ion-list-header>
+                <ion-label>Detalle Pedido</ion-label>
+            </ion-list-header>
+
+            <ion-col size-sm="8" offset-sm="2" size-md="6" offset-md="3" size-lg="6" offset-lg="3">
+
+                <ion-list>
+                    <ion-item-sliding *ngFor="let listados of pedido.detallePedidos; let i = index">
+                        <ion-item button (click)="editarProducto(i)" *ngIf="i!=dT">
+
+                            <ion-label>
+                                <h3>{{ listados.producto.nombre }}</h3>
+                                <p>${{ listados.producto.precio | moneda }} </p>
+                            </ion-label>
+
+                            <ion-label slot="end" class="ion-text-end text-small">
+                                <h3>Cantidad: {{ listados.cantidad }}</h3>
+                                <h3>Total: ${{ tablaSubtotal(i) | moneda}}</h3>
+                            </ion-label>
+
+                            <ion-button slot="end" color="danger" (click)="eliminarDetalle(i)" fill="clear" (blur)="calcularTotal()">
+                                <ion-icon slot="icon-only" name="close"></ion-icon>
+                            </ion-button>
+
+                        </ion-item>
+
+                        <ion-item *ngIf="i==dT">
+
+                            <ion-label>Producto</ion-label>
+
+                            <ion-select [interfaceOptions]="productoOptions" interface="popover" [compareWith]="compareProducto" placeholder="Seleccione Producto" name="productos" [(ngModel)]="pedido.detallePedidos[dT].producto" id="producto">
+                                <ion-select-option *ngFor="let productos of productoPedido" [value]="productos">{{productos.nombre}}</ion-select-option>
+                            </ion-select>
+                        </ion-item>
+                        <ion-item *ngIf="i==dT">
+                            <ion-label>cantidad</ion-label>
+                            <ion-input type="text" placeholder="cantidad" name="cantidad" [(ngModel)]="pedido.detallePedidos[dT].cantidad" pattern="^([0-9\.]{1,6})$" id="cantidad"></ion-input>
+
+                            <ion-button side="end" color="danger" (click)="editarCerrar()" fill="clear" (blur)="calcularTotal()">
+                                <ion-icon name="close"></ion-icon>
+                            </ion-button>
+                        </ion-item>
+
+                    </ion-item-sliding>
+
+                </ion-list>
+
+                <ion-item *ngIf="agregar">
+
+                    <ion-label>Nuevo Producto</ion-label>
+
+                    <ion-select [interfaceOptions]="productoOptions" interface="popover" [compareWith]="compareProducto" placeholder="Seleccione Producto" name="productos" [(ngModel)]="detalle.producto" id="producto">
+                        <ion-select-option *ngFor="let productos of productoPedido" [value]="productos">{{productos.nombre}}</ion-select-option>
+                    </ion-select>
+                </ion-item>
+                <ion-item *ngIf="agregar">
+                    <ion-label>cantidad</ion-label>
+                    <ion-input type="text" placeholder="0" name="cantidad" [(ngModel)]="detalle.cantidad" pattern="^([0-9\.]{1,6})$" id="cantidad"></ion-input>
+
+                    <ion-button side="end" color="danger" (click)="cancelarDetalle()" fill="clear" *ngIf="pedido.detallePedidos" (blur)="calcularTotal()">
+                        <ion-icon name="close"></ion-icon>
+                    </ion-button>
+                    <ion-button side="end" color="success" (click)="guardarDetalle()" fill="clear" (blur)="calcularTotal()">
+                        <ion-icon name="checkmark"></ion-icon>
+                    </ion-button>
+                </ion-item>
+
+                <ion-list-header>
+                    <ion-label>Valor Final</ion-label>
+                </ion-list-header>
+
+                <ion-row>
+                    <ion-col>
+                        Neto
+                    </ion-col>
+                    <ion-col>
+                        ${{neto | moneda}}
+                    </ion-col>
+                </ion-row>
+                <ion-row>
+                    <ion-col>
+                        Iva
+                    </ion-col>
+                    <ion-col>
+                        ${{iva | moneda}}
+                    </ion-col>
+                </ion-row>
+                <ion-row>
+                    <ion-col>
+                        Total
+                    </ion-col>
+                    <ion-col>
+                        ${{totalvalor | moneda}}
+                    </ion-col>
+                </ion-row>
+
+                <ion-item>
+                    <ion-textarea name="observable" [(ngModel)]="pedido.observaciones" id="observable">
+                        <h6>Observaciónes</h6>
+                    </ion-textarea>
+                </ion-item>
+            </ion-col>
+        </ion-row>
+
+    </form>
+
+    <ion-row *ngIf="!data">
+        <ion-col size-sm="8" offset-sm="2" size-md="6" offset-md="3" size-lg="6" offset-lg="3">
+            <ion-item>
+                <ion-skeleton-text animated style="width: 100%"></ion-skeleton-text>
+            </ion-item>
+            <ion-item>
+                <ion-skeleton-text animated style="width: 100%"></ion-skeleton-text>
+            </ion-item>
+            <ion-item>
+                <ion-skeleton-text animated style="width: 100%"></ion-skeleton-text>
+            </ion-item>
+        </ion-col>
+    </ion-row>
+
+
+    <ion-fab vertical="bottom" horizontal="end" slot="fixed" class="ion-padding" id="fabAgregarProducto">
+        <ion-fab-button (click)="agregarDetalle()">
+            <ion-icon name="add"></ion-icon>
+        </ion-fab-button>
+    </ion-fab>
+
+</ion-content>

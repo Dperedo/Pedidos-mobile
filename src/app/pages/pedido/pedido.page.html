@@ -1,0 +1,78 @@
+<ion-header [translucent]="true">
+    <ion-toolbar>
+        <ion-buttons slot="start" id="menu">
+            <ion-menu-button></ion-menu-button>
+        </ion-buttons>
+        <ion-title>Pedido</ion-title>
+
+        <ion-buttons slot="end" id="ordenar">
+            <ion-button (click)="presentPopover( $event )" color="primary">
+                <ion-icon slot="icon-only" name="funnel-outline"></ion-icon>
+            </ion-button>
+        </ion-buttons>
+
+    </ion-toolbar>
+</ion-header>
+
+
+<ion-content class="ion-padding">
+
+    <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
+        <ion-refresher-content></ion-refresher-content>
+    </ion-refresher>
+
+    <ion-progress-bar type="indeterminate" *ngIf="loading"></ion-progress-bar>
+
+    <ion-list>
+
+        <ion-item-sliding *ngFor="let listados of listado; let i = index">
+
+            <ion-item button (click)="editarPedido(listados.id)" routerDirection="root" [routerLink]="'/formulario-pedido'">
+                <ion-label>
+                    <h3>N°: {{ listados.secuencial }}</h3>
+                    <p> {{ listados.fechaDeCreacion | date:'dd/MM/yy'}} </p>
+                </ion-label>
+
+                <ion-label slot="end" class="ion-text-end text-small">
+                    <h3>$ {{ listados.total | moneda }}</h3>
+                    <p>{{listados.estado.estadoPedido}}</p>
+                </ion-label>
+
+            </ion-item>
+
+            <ion-item-options side="end" id="cancelado">
+                <ion-item-option color="warning" (click)="getEstadoCancelado(listados)">
+                    <ion-icon slot="icon-only" name="remove-circle-outline"></ion-icon>
+                </ion-item-option>
+                <ion-item-option color="danger" (click)="eliminarPedido(listados.id,i)">
+                    <ion-icon slot="icon-only" name="trash"></ion-icon>
+                </ion-item-option>
+            </ion-item-options>
+
+        </ion-item-sliding>
+
+    </ion-list>
+
+    <ion-infinite-scroll threshold="20px" (ionInfinite)="loadData($event)">
+        <ion-infinite-scroll-content loadingSpinner="bubbles" loadingText="Cargando más datos...">
+        </ion-infinite-scroll-content>
+    </ion-infinite-scroll>
+
+    <ion-fab vertical="bottom" slot="fixed" horizontal="start">
+        <ion-fab-button (click)="presentAlertBuscar()" id="fabBuscar">
+            <ion-icon name="search"></ion-icon>
+        </ion-fab-button>
+
+        <ion-fab-list side="end">
+            <ion-fab-button color="danger" (click)="cancelarBuscar()" id="fabBuscarCancelar">
+                <ion-icon name="backspace"></ion-icon>
+            </ion-fab-button>
+        </ion-fab-list>
+    </ion-fab>
+
+    <ion-fab vertical="bottom" horizontal="end" slot="fixed">
+        <ion-fab-button (click)="agregarPedido()" routerDirection="root" [routerLink]="'/formulario-pedido'" id="fabAgregar">
+            <ion-icon name="add"></ion-icon>
+        </ion-fab-button>
+    </ion-fab>
+</ion-content>

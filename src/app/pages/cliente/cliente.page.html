@@ -1,0 +1,98 @@
+<ion-header [translucent]="true">
+    <ion-toolbar>
+        <ion-buttons slot="start" id="menu">
+            <ion-menu-button></ion-menu-button>
+        </ion-buttons>
+        <ion-title>Cliente</ion-title>
+
+        <ion-buttons slot="end" id="ordenar">
+            <ion-button (click)="presentPopover( $event )" color="primary">
+                <ion-icon slot="icon-only" name="funnel-outline"></ion-icon>
+            </ion-button>
+        </ion-buttons>
+
+    </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+
+    <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
+        <ion-refresher-content></ion-refresher-content>
+    </ion-refresher>
+
+    <ion-progress-bar type="indeterminate" *ngIf="loading"></ion-progress-bar>
+
+    <ion-list>
+
+        <ion-item-sliding *ngFor="let listados of listado; let i = index">
+
+            <ion-item button (click)="editarCliente(listados.id)" routerDirection="root" [routerLink]="'/formulario-cliente'" id="cli_{{listados.id}}">
+
+                <ion-label>
+                    <h3>{{ listados.razonSocial }}</h3>
+                    <p>RUT: {{ listados.rut }} </p>
+                </ion-label>
+
+                <ion-label slot="end" class="ion-text-end text-small">
+
+                    <h2 *ngIf="listados.vigente ">Vigente: Sí
+                    </h2>
+                    <h2 *ngIf="!listados.vigente ">Vigente: No
+                    </h2>
+                    <p>{{ listados.fechaDeCreacion | date:'dd/MM/yyyy' }}</p>
+                </ion-label>
+
+            </ion-item>
+
+            <ion-item-options side="end" id="vigente">
+                <ion-item-option color="success" (click)="presentAlertVigente(listados)" *ngIf="!listados.vigente" id="vigente_checkmark">
+                    <ion-icon slot="icon-only" name="checkmark"></ion-icon>
+                </ion-item-option>
+                <ion-item-option color="warning" (click)="presentAlertVigente(listados)" *ngIf="listados.vigente" id="vigente_close">
+                    <ion-icon slot="icon-only" name="close"></ion-icon>
+                </ion-item-option>
+                <ion-item-option color="danger" (click)="eliminarCliente(listados.id,i)">
+                    <ion-icon slot="icon-only" name="trash"></ion-icon>
+                </ion-item-option>
+            </ion-item-options>
+
+        </ion-item-sliding>
+
+    </ion-list>
+
+    <ion-infinite-scroll threshold="20px" (ionInfinite)="loadData($event)">
+        <ion-infinite-scroll-content loadingSpinner="bubbles" loadingText="Cargando más datos...">
+        </ion-infinite-scroll-content>
+    </ion-infinite-scroll>
+
+    <!--
+    <ion-slides pager style="padding-top: 50px" [options]="slideOpts">
+        <ion-slide>
+            <p>Page1</p>
+        </ion-slide>
+        <ion-slide>
+            <p>Page2</p>
+        </ion-slide>
+        <ion-slide>
+            <p>Page3</p>
+        </ion-slide>
+    </ion-slides>-->
+
+    <ion-fab vertical="bottom" slot="fixed" horizontal="start">
+        <ion-fab-button (click)="presentAlertBuscar()" id="fabBuscar">
+            <ion-icon name="search"></ion-icon>
+        </ion-fab-button>
+
+        <ion-fab-list side="end">
+            <ion-fab-button color="danger" (click)="cancelarBuscar()" id="fabBuscarCancelar">
+                <ion-icon name="backspace"></ion-icon>
+            </ion-fab-button>
+        </ion-fab-list>
+    </ion-fab>
+
+    <ion-fab vertical="bottom" horizontal="end" slot="fixed">
+        <ion-fab-button (click)="agregarCliente()" routerDirection="root" [routerLink]=" '/formulario-cliente'" id="fabAgregar">
+            <ion-icon name="add"></ion-icon>
+        </ion-fab-button>
+    </ion-fab>
+</ion-content>

@@ -1,0 +1,43 @@
+<ion-list>
+
+    <ion-item button *ngIf="orden!='CodigoAcending'" (click)="ordenBy('CodigoAcending')">
+        <ion-label>Código</ion-label>
+        <ion-icon name="chevron-down-outline" *ngIf="orden=='CodigoDescending'"></ion-icon>
+    </ion-item>
+    <ion-item button *ngIf="orden=='CodigoAcending'" (click)="ordenBy('CodigoDescending')">
+        <ion-label>Código</ion-label>
+        <ion-icon name="chevron-up-outline" *ngIf="orden=='CodigoAcending'"></ion-icon>
+    </ion-item>
+
+
+    <ion-item button *ngIf="orden!='NombreAcending'" (click)="ordenBy('NombreAcending')">
+        <ion-label>Nombre</ion-label>
+        <ion-icon name="chevron-down-outline" *ngIf="orden=='NombreDescending'"></ion-icon>
+    </ion-item>
+    <ion-item button *ngIf="orden=='NombreAcending'" (click)="ordenBy('NombreDescending')">
+        <ion-label>Nombre</ion-label>
+        <ion-icon name="chevron-up-outline" *ngIf="orden=='NombreAcending'"></ion-icon>
+    </ion-item>
+
+
+    <ion-item button *ngIf="orden!='PrecioAcending'" (click)="ordenBy('PrecioAcending')">
+        <ion-label>Valor</ion-label>
+        <ion-icon name="chevron-down-outline" *ngIf="orden=='PrecioDescending'"></ion-icon>
+    </ion-item>
+    <ion-item button *ngIf="orden=='PrecioAcending'" (click)="ordenBy('PrecioDescending')">
+        <ion-label>Valor</ion-label>
+        <ion-icon name="chevron-up-outline" *ngIf="orden=='PrecioAcending'"></ion-icon>
+    </ion-item>
+
+
+    <ion-item button *ngIf="orden!='VigenteAcending'" (click)="ordenBy('VigenteAcending')">
+        <ion-label>Vigente</ion-label>
+        <ion-icon name="chevron-down-outline" *ngIf="orden=='VigenteDescending'"></ion-icon>
+    </ion-item>
+    <ion-item button *ngIf="orden=='VigenteAcending'" (click)="ordenBy('VigenteDescending')">
+        <ion-label>Vigente</ion-label>
+        <ion-icon name="chevron-up-outline" *ngIf="orden=='VigenteAcending'"></ion-icon>
+    </ion-item>
+
+
+</ion-list>

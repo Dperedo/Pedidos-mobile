@@ -1,0 +1,72 @@
+<ion-header class="ion-no-border" translucent>
+    <ion-toolbar>
+
+        <ion-buttons slot="start" id="volver">
+            <ion-back-button defaultHref="/cliente" routerDirection="root" text="Volver" color="primary">
+            </ion-back-button>
+        </ion-buttons>
+
+
+        <ion-title *ngIf="data" class="ion-text-capitalize">
+            {{ titulo || 'Formulario' }}
+        </ion-title>
+
+        <ion-title *ngIf="!data" class="ion-text-capitalize">
+            <ion-skeleton-text animated style="width: 150px; height:25px"></ion-skeleton-text>
+        </ion-title>
+
+        <ion-buttons slot="end" id="guardar">
+            <ion-button *ngIf="!formulario.valid" color="danger" (click)="guardar(formulario.valid)">
+                <ion-icon name="send-outline"></ion-icon>
+            </ion-button>
+            <ion-button *ngIf="formulario.valid" color="success" (click)="guardar(formulario.valid)" routerDirection="root">
+                <ion-icon name="send"></ion-icon>
+            </ion-button>
+        </ion-buttons>
+
+    </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+
+    <form #formulario="ngForm" (ngSubmit)="onSubmit(formulario)">
+
+        <ion-list-header>
+            <ion-label>Formulario válido: {{ formulario.valid }}</ion-label>
+        </ion-list-header>
+
+        <ion-row *ngIf="data">
+            <ion-col size-sm="8" offset-sm="2" size-md="6" offset-md="3" size-lg="6" offset-lg="3">
+                <ion-item>
+                    <ion-label>Razon Social:</ion-label>
+                    <ion-input type="text" placeholder="Nombre" name="nombre" [(ngModel)]="cliente.razonSocial" pattern="^([a-zA-ZñÑáéíóúÁÉÍÓÚ0-9_\-\.\s]{2,50})$" required id="razonSocial"></ion-input>
+                </ion-item>
+                <ion-item>
+                    <ion-label>RUT:</ion-label>
+                    <ion-input type="text" placeholder="11111111-1" name="rut" [(ngModel)]="cliente.rut" pattern="^([0-9\-]{9,11})$" required id="rut"></ion-input>
+                </ion-item>
+                <ion-item>
+                    <ion-label>Vigente:</ion-label>
+                    <ion-checkbox type="checkbox" name="vigente" [(ngModel)]="cliente.vigente" id="vigente"></ion-checkbox>
+                </ion-item>
+            </ion-col>
+        </ion-row>
+
+    </form>
+
+    <ion-row *ngIf="!data">
+        <ion-col size-sm="8" offset-sm="2" size-md="6" offset-md="3" size-lg="6" offset-lg="3">
+            <ion-item>
+                <ion-skeleton-text animated style="width: 100%"></ion-skeleton-text>
+            </ion-item>
+            <ion-item>
+                <ion-skeleton-text animated style="width: 100%"></ion-skeleton-text>
+            </ion-item>
+            <ion-item>
+                <ion-skeleton-text animated style="width: 100%"></ion-skeleton-text>
+            </ion-item>
+        </ion-col>
+    </ion-row>
+
+
+</ion-content>
