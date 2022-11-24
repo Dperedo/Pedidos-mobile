@@ -61,32 +61,32 @@ export class FormularioPedidoPage implements OnInit {
 
   editarCerrar() {
     this.dT = -1;
-    console.log(this.dT);
+    //console.log(this.dT);
   }
 
   onSubmit(formulario: NgForm) {
-    console.log('formulario');
-    console.log(this.pedido);
-    console.log(formulario);
+    //console.log('formulario');
+    //console.log(this.pedido);
+    //console.log(formulario);
     this.formulario = formulario;
-    console.log(this.formulario);
+    //console.log(this.formulario);
   }
 
   editarProducto(i: number) {
-    console.log('numero de editar: '+i);
+    //console.log('numero de editar: '+i);
     this.dT = i;
 
   }
 
   validador() {
-    console.log(this.pedido.detallePedidos.length);
+    //console.log(this.pedido.detallePedidos.length);
     this.form = true;
   }
 
   calcularTotal()
   {
     // this.extraerProducto(i);
-    console.log('calcularTotal');
+    //console.log('calcularTotal');
     this.neto = 0;
     this.pedido.detallePedidos.forEach( linea => {
       if ( !isNaN(linea.producto.precio) && !isNaN(linea.cantidad) ) {
@@ -151,33 +151,33 @@ export class FormularioPedidoPage implements OnInit {
     this.auth.getSelectorEstado('Estados').subscribe( resp => {
       this.estadoPedido = resp;
       this.pedido.estado = this.estadoPedido[2];
-      console.log(this.estadoPedido);
+      //console.log(this.estadoPedido);
     });
   }
 
   guardar(forma: boolean) {
-    console.log('guardar pedido');
-    console.log(this.pedido);
-    console.log(forma);
+    //console.log('guardar pedido');
+    //console.log(this.pedido);
+    //console.log(forma);
     if ( !forma ) {
       // this.cli.idCliente;
       this.presentAlert();
-      console.log('no');
+      //console.log('no');
     } else 
     {
       this.pedido.total = this.totalvalor;
-      console.log('guarda');
+      //console.log('guarda');
       if ( this.pedido.id ) {
-        console.log('Modificando: ' + this.pedido.id);
+        //console.log('Modificando: ' + this.pedido.id);
         this.auth.putDato('Pedidos', this.pedido).subscribe( resp => {
-          console.log(resp);
-          console.log('ok');
+          //console.log(resp);
+          //console.log('ok');
           this.navCtlr.navigateRoot(['/pedido']);
         });
       } else {
-        console.log('Nuevo Pedido');
+        //console.log('Nuevo Pedido');
         this.auth.postDato(this.pedido, 'Pedidos').subscribe( resp => {
-          console.log(resp);
+          //console.log(resp);
           this.navCtlr.navigateRoot(['/pedido']);
         });
       }
@@ -200,17 +200,17 @@ export class FormularioPedidoPage implements OnInit {
   }
 
   guardarDetalle() {
-    console.log(this.detalle);
+    //console.log(this.detalle);
     if ( !this.detalle.producto || !this.detalle.cantidad ) {
       this.presentAlert();
       return;
     }
     if( !this.pedido.detallePedidos ) {
-      console.log('no hay detalle');
+      //console.log('no hay detalle');
       this.pedido.detallePedidos = [];  
     }
     let num = this.pedido.detallePedidos.length;
-    console.log(num);
+    //console.log(num);
     this.pedido.detallePedidos.push();
     this.pedido.detallePedidos[num] = this.detalle;
     this.detalle = new DetallePedidoModel();
@@ -225,7 +225,7 @@ export class FormularioPedidoPage implements OnInit {
   eliminarDetalle(i: number) {
     //console.log('eliminar: '+detalle);
     //let index = this.pedido.detallePedidos.indexOf(detalle);
-    console.log(i);
+    //console.log(i);
     this.pedido.detallePedidos.splice(i,1);
   }
   // ------------------------

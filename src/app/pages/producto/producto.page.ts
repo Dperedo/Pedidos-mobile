@@ -43,19 +43,19 @@ export class ProductoPage implements OnInit {
   }
 
   loadData( event ) {
-    console.log(event);
+    //console.log(event);
 
     setTimeout(() => {
 
       if ( this.listado.length >= this.total ) {
-        console.log('todos los elementos');
+        //console.log('todos los elementos');
         this.inifiteScroll.complete();
         this.inifiteScroll.disabled = true;
         return;
       }
       const dato = parseInt(this.page) + 1;
       this.page = dato.toString();
-      console.log(this.page);
+      //console.log(this.page);
       this.listadoProducto();
       this.inifiteScroll.complete();
     }, 1500);
@@ -78,7 +78,7 @@ export class ProductoPage implements OnInit {
     }
     this.loading = true;
     localStorage.setItem('orden', this.orden);
-    console.log(data.item);
+    //console.log(data.item);
     this.listadoProducto();
 
   }
@@ -92,7 +92,7 @@ export class ProductoPage implements OnInit {
 
   listadoProducto() {
     this.loading = true;
-    console.log('listadoProducto');
+    //console.log('listadoProducto');
     this.auth.getDato('Productos', this.buscar, this.page, this.orden).subscribe(
       resp => {
         if(this.page != '1'){
@@ -102,7 +102,7 @@ export class ProductoPage implements OnInit {
         }
         this.total = resp['total'];
         this.paginas = resp['numpages'];
-        console.log(resp);
+        //console.log(resp);
         this.loading = false;
       }
     );
@@ -131,9 +131,9 @@ export class ProductoPage implements OnInit {
         }, {
           text: 'Ok',
           handler: ( data:any ) => {
-            console.log(data)
+            //console.log(data)
             this.buscar = data.Buscar;
-            console.log(this.buscar);
+            //console.log(this.buscar);
             this.listadoProducto();
           }
         }
@@ -167,19 +167,19 @@ export class ProductoPage implements OnInit {
   }
 
   guardar(producto: any) {
-    console.log('guardar');
-    console.log(producto);
+    //console.log('guardar');
+    //console.log(producto);
     this.auth.putDato('Productos', producto).subscribe( resp => {
-      console.log(resp);
-      console.log('ok');
+      //console.log(resp);
+      //console.log('ok');
     });
 
   }
 
   eliminarProducto(id: string, i: number) {
     this.auth.deleteDato('Productos', id).subscribe( resp => {
-      console.log(resp);
-      console.log('ok');
+      //console.log(resp);
+      //console.log('ok');
       this.listado.splice(i,1);
       this.total = this.total-1;
     });
@@ -194,12 +194,12 @@ export class ProductoPage implements OnInit {
           role: 'cancel',
           cssClass: 'secondary',
           handler: () => {
-            console.log('Confirm Cancel');
+            //console.log('Confirm Cancel');
           }
         }, {
           text: 'Ok',
           handler: ( data:any ) => {
-            console.log(data);
+            //console.log(data);
             if(producto.vigente) {
               this.vigenteFalse(producto);
             } else {

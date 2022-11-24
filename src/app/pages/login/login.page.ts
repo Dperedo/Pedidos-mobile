@@ -26,14 +26,14 @@ export class LoginPage implements OnInit {
     private navCtlr: NavController,
   ) {
     if ( localStorage.getItem('token') ) {
-      console.log('hay token');
+      //console.log('hay token');
       this.navCtlr.navigateRoot(['/pedido']);
     }
   }
 
   ngOnInit() {
     if ( localStorage.getItem('username') ) {
-      console.log("hey");
+      //console.log("hey");
       this.usuario.username =  localStorage.getItem('username');
       this.recordarme = true;
     }
@@ -42,7 +42,7 @@ export class LoginPage implements OnInit {
   doRefresh( event ) {
     setTimeout(() => {
       if ( localStorage.getItem('token') ) {
-        console.log('hay token');
+        //console.log('hay token');
         this.navCtlr.navigateRoot(['/pedido']);
       }
       event.target.complete();
@@ -50,8 +50,8 @@ export class LoginPage implements OnInit {
   } 
 
   onSubmit(formulario: NgForm) {
-    console.log('formulario');
-    console.log(this.usuario);
+    //console.log('formulario');
+    //console.log(this.usuario);
     // console.log(formulario);
     this.formulario = formulario;
     // console.log(this.formulario);
@@ -59,9 +59,9 @@ export class LoginPage implements OnInit {
 
   ingresar(formulario: boolean) {
     this.loading = true;
-    console.log(formulario);
-    console.log(this.usuario.username);
-    console.log(this.usuario.password);
+    //console.log(formulario);
+    //console.log(this.usuario.username);
+    //console.log(this.usuario.password);
     if ( !formulario ) {
       this.loading = false;
       if (this.usuario.username == undefined || this.usuario.username == '') {this.presentEmail()}
@@ -69,7 +69,7 @@ export class LoginPage implements OnInit {
       return;
      }
 
-    console.log(this.usuario);
+    //console.log(this.usuario);
 
     this.auth.login(this.usuario).subscribe( resp => {
       if ( this.recordarme ) {
@@ -78,9 +78,9 @@ export class LoginPage implements OnInit {
       this.loading = false;
       this.navCtlr.navigateRoot(['/pedido']);
       this.app.mostrarMenu();
-      console.log(resp);
+      //console.log(resp);
     }, (err) => {
-      console.log(err.status);
+      //console.log(err.status);
       this.loading = false;
       if (err.status === 401) {
         this.presentIncorrecto();

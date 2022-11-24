@@ -60,12 +60,12 @@ export class AppComponent {
           role: 'cancel',
           cssClass: 'secondary',
           handler: () => {
-            console.log('Confirm Cancel');
+            //console.log('Confirm Cancel');
           }
         }, {
           text: 'Salir',
           handler: ( data:any ) => {
-            console.log(data);
+            //console.log(data);
             this.auth.logout();
             this.mostrarMenu();
             this.navCtlr.navigateRoot(['/login']);

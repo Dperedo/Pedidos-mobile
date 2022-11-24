@@ -24,8 +24,8 @@ export class AuthService {
               private rutas: Router,
               private alertCtrl: AlertController,
               private navCtlr: NavController, ) {
-                console.log(this.url2);
-                console.log('url');
+                //console.log(this.url2);
+                //console.log('url');
               }
 
   getMenuOpts() {
@@ -39,13 +39,13 @@ export class AuthService {
       page = '';
     }
 
-    console.log('Primer paso');
+    //console.log('Primer paso');
 
     const headers = new HttpHeaders({
       Authorization: `Bearer ${ this.userToken }`
     });  
-    console.log('page=' + page, 'buscar=' + buscar, 'orden=' + orden);
-    console.log('Dentro de getDatoBuscar');
+    //console.log('page=' + page, 'buscar=' + buscar, 'orden=' + orden);
+    //console.log('Dentro de getDatoBuscar');
 
     this.PuedeActivarse();
 
@@ -59,8 +59,8 @@ export class AuthService {
     const headers = new HttpHeaders({
       Authorization: `Bearer ${ this.userToken }`
     });
-    console.log('ID=' + ID);
-    console.log('Dentro de getDatoId');
+    //console.log('ID=' + ID);
+    //console.log('Dentro de getDatoId');
 
     this.PuedeActivarse();
 
@@ -76,8 +76,8 @@ export class AuthService {
     const headers = new HttpHeaders({
       Authorization: `Bearer ${ this.userToken }`
     });
-    console.log('Dentro de postDato');
-    console.log(Data);
+    //console.log('Dentro de postDato');
+    //console.log(Data);
 
     this.PuedeActivarse();
 
@@ -93,8 +93,8 @@ export class AuthService {
     const headers = new HttpHeaders({
       Authorization: `Bearer ${ this.userToken }`
     });
-    console.log('Dentro de putDato');
-    console.log(Data);
+    //console.log('Dentro de putDato');
+    //console.log(Data);
 
     this.PuedeActivarse();
 
@@ -107,8 +107,8 @@ export class AuthService {
     const headers = new HttpHeaders({
       Authorization: `Bearer ${ this.userToken }`
     });
-    console.log('Dentro de deleteDato');
-    console.log(id);
+    //console.log('Dentro de deleteDato');
+    //console.log(id);
 
     this.PuedeActivarse();
 
@@ -144,7 +144,7 @@ export class AuthService {
       ...usuario,
       //returnSecureToken: true
     };
-    console.log(authData);
+    //console.log(authData);
     return this.http.post(
       `${ this.url }/Usuarios/auth`,
       authData
@@ -174,7 +174,7 @@ export class AuthService {
 
   estaAutenticado(): boolean {
     this.leerToken();
-    console.log('estaAutenticado');
+    //console.log('estaAutenticado');
     if ( this.userToken.length < 2 ) {
       return false;
     }
@@ -183,11 +183,11 @@ export class AuthService {
     
     //--
     if ( this.respuesta === false ) {
-      console.log('respuesta: '+ this.respuesta);
+      //console.log('respuesta: '+ this.respuesta);
       return false;
     }
-    console.log(this.respuesta);
-    console.log('estaAutenticado2');
+    //console.log(this.respuesta);
+    //console.log('estaAutenticado2');
     const expira = Number(localStorage.getItem('expira'));
 
     // console.log('Expira: ' + expira);
@@ -208,21 +208,21 @@ export class AuthService {
       Authorization: `Bearer ${ this.userToken }`
     });
 
-    console.log('estado Del Token');
+    //console.log('estado Del Token');
     this.http.get(`${ this.url }/usuarios`, { headers, observe: 'response' })
     .subscribe(response => {
-      console.log('suscrito');
-      console.log(response.status);
+      //console.log('suscrito');
+      //console.log(response.status);
     },
     (err) => {
-      console.log('HTTP Error', err.status);
+      //console.log('HTTP Error', err.status);
       // this.ruta.navigateByUrl('/login');
       this.logout();
       if (err.status === 0) {
         this.presentDesconectado();
       }
     });
-    console.log('fuera del suscrito ' + this.respuesta);
+    //console.log('fuera del suscrito ' + this.respuesta);
     
   }
 
@@ -240,10 +240,10 @@ export class AuthService {
 
   PuedeActivarse(): boolean {
     if ( this.estaAutenticado() ) {
-      console.log('ok');
+      //console.log('ok');
       return true;
     } else {
-      console.log('no ok');
+      //console.log('no ok');
       this.navCtlr.navigateRoot(['/login']);
       this.logout();
       return false;
@@ -259,7 +259,7 @@ export class AuthService {
         {
           text: 'Ok',
           handler: ( data:any ) => {
-            console.log(data);
+            //console.log(data);
             this.navCtlr.navigateRoot(['/login']);
           }
         }

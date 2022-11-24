@@ -37,11 +37,11 @@ export class FormularioClientePage implements OnInit {
   }
 
   onSubmit(formulario: NgForm) {
-    console.log('formulario');
-    console.log(this.cliente);
-    console.log(formulario);
+    //console.log('formulario');
+    //console.log(this.cliente);
+    //console.log(formulario);
     this.formulario = formulario;
-    console.log(this.formulario);
+    //console.log(this.formulario);
   }
 
   getCliente(Id: string) {
@@ -55,12 +55,12 @@ export class FormularioClientePage implements OnInit {
   }
 
   guardar(forma: boolean) {
-    console.log('guardar cliente');
-    console.log(this.cliente);
-    console.log(forma);
+    //console.log('guardar cliente');
+    //console.log(this.cliente);
+    //console.log(forma);
     this.validarRut = validateRut(this.cliente.rut);
     //this.validarRut = this.rutService.validaRUT(this.cliente.rut);
-    console.log(this.validarRut);
+    //console.log(this.validarRut);
     if ( !forma || !this.validarRut ) {
       // this.cli.idCliente;
       if(!forma) {
@@ -69,23 +69,23 @@ export class FormularioClientePage implements OnInit {
         this.presentAlertRut();
       }
       
-      console.log('no');
+      //console.log('no');
     } else 
     {
-      console.log('guarda');
+      //console.log('guarda');
       if ( this.cliente.id ) {
-        console.log('Modificando: ' + this.cliente.id);
+        //console.log('Modificando: ' + this.cliente.id);
         this.auth.putDato('Clientes', this.cliente).subscribe( resp => {
-          console.log(resp);
-          console.log('ok');
+          //console.log(resp);
+          //console.log('ok');
           this.navCtlr.navigateRoot(['/cliente']);
           //this.rutas.navigate(['/cliente']);
           //this.cliente = new ClienteModel();
         });
       } else {
-        console.log('Nuevo Cliente');
+        //console.log('Nuevo Cliente');
         this.auth.postDato(this.cliente, 'Clientes').subscribe( resp => {
-          console.log(resp);
+          //console.log(resp);
           this.navCtlr.navigateRoot(['/cliente']);
         });
       }
