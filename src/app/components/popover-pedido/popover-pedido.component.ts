@@ -20,7 +20,6 @@ export class PopoverPedidoComponent implements OnInit {
 
   ordenBy( ordenPor: string ) {
     this.orden = ordenPor;
-    //console.log('orden: '+this.orden);
     
     this.popoverCtrl.dismiss({
       item: ordenPor

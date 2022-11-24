@@ -33,44 +33,28 @@ export class FormularioProductoPage implements OnInit {
   }
 
   onSubmit(formulario: NgForm) {
-    //console.log('formulario');
-    //console.log(this.producto);
-    //console.log(formulario);
     this.formulario = formulario;
-    //console.log(this.formulario);
   }
 
   getProducto(Id: string) {
     this.auth.getDatoId('Productos', Id).subscribe( resp => {
       this.producto = resp;
       this.titulo = this.producto.nombre;
-      //console.log(this.producto);
       this.data = true;
     });
   }
 
   guardar(forma: boolean) {
-    //console.log('guardar producto');
-    //console.log(this.producto);
-    //console.log(forma);
     if ( !forma ) {
-      // this.cli.idCliente;
       this.presentAlert();
-      //console.log('no');
     } else 
     {
-      //console.log('guarda');
       if ( this.producto.id ) {
-        //console.log('Modificando: ' + this.producto.id);
         this.auth.putDato('Productos', this.producto).subscribe( resp => {
-          //console.log(resp);
-          //console.log('ok');
           this.navCtlr.navigateRoot(['/producto']);
         });
       } else {
-        //console.log('Nuevo Producto');
         this.auth.postDato(this.producto, 'Productos').subscribe( resp => {
-          //console.log(resp);
           this.navCtlr.navigateRoot(['/producto']);
         });
       }

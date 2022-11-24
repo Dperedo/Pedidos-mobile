@@ -15,9 +15,7 @@ export class PopoverInfoComponent implements OnInit {
 
   constructor(
     private popoverCtrl: PopoverController,
-    //private cliente: ClientePage
     ) { 
-      //console.log(this.cliente.orden);
       this.orden = localStorage.getItem('orden');
     }
 
@@ -25,18 +23,11 @@ export class PopoverInfoComponent implements OnInit {
 
   ordenBy( ordenPor: string ) {
     this.orden = ordenPor;
-    //console.log('orden: '+this.orden);
-    
+
     this.popoverCtrl.dismiss({
       item: ordenPor
     });
 
   }
-
-  /*ordenBy(ordenPor: string) {
-    this.orden = ordenPor;
-    console.log(this.orden);
-    //this.listadoCliente();
-  }*/
 
 }

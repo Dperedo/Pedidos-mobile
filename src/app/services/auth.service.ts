@@ -24,8 +24,6 @@ export class AuthService {
               private rutas: Router,
               private alertCtrl: AlertController,
               private navCtlr: NavController, ) {
-                //console.log(this.url2);
-                //console.log('url');
               }
 
   getMenuOpts() {
@@ -39,13 +37,9 @@ export class AuthService {
       page = '';
     }
 
-    //console.log('Primer paso');
-
     const headers = new HttpHeaders({
       Authorization: `Bearer ${ this.userToken }`
-    });  
-    //console.log('page=' + page, 'buscar=' + buscar, 'orden=' + orden);
-    //console.log('Dentro de getDatoBuscar');
+    });
 
     this.PuedeActivarse();
 
@@ -59,8 +53,6 @@ export class AuthService {
     const headers = new HttpHeaders({
       Authorization: `Bearer ${ this.userToken }`
     });
-    //console.log('ID=' + ID);
-    //console.log('Dentro de getDatoId');
 
     this.PuedeActivarse();
 
@@ -76,8 +68,6 @@ export class AuthService {
     const headers = new HttpHeaders({
       Authorization: `Bearer ${ this.userToken }`
     });
-    //console.log('Dentro de postDato');
-    //console.log(Data);
 
     this.PuedeActivarse();
 
@@ -93,8 +83,6 @@ export class AuthService {
     const headers = new HttpHeaders({
       Authorization: `Bearer ${ this.userToken }`
     });
-    //console.log('Dentro de putDato');
-    //console.log(Data);
 
     this.PuedeActivarse();
 
@@ -107,8 +95,6 @@ export class AuthService {
     const headers = new HttpHeaders({
       Authorization: `Bearer ${ this.userToken }`
     });
-    //console.log('Dentro de deleteDato');
-    //console.log(id);
 
     this.PuedeActivarse();
 
@@ -116,35 +102,29 @@ export class AuthService {
   }
 
   getSelector(controlador: string){
-    // const url = 'https://localhost:5001/api/Usuarios';
     this.userToken = this.leerToken();
 
     const headers = new HttpHeaders({
       Authorization: `Bearer ${ this.userToken }`
     });
 
-    // console.log('Dentro de Selector');
     return this.http.get(`${ this.url }/${ controlador }/vigente`, { headers }).pipe(map((res: any) => res));
   }
 
   getSelectorEstado(controlador: string){
-    // const url = 'https://localhost:5001/api/Usuarios';
     this.userToken = this.leerToken();
 
     const headers = new HttpHeaders({
       Authorization: `Bearer ${ this.userToken }`
     });
 
-    // console.log('Dentro de Selector');
     return this.http.get(`${ this.url }/${ controlador }`, { headers }).pipe(map((res: any) => res));
   }
 
   login( usuario: UsuarioModel ) {
     const authData = {
       ...usuario,
-      //returnSecureToken: true
     };
-    //console.log(authData);
     return this.http.post(
       `${ this.url }/Usuarios/auth`,
       authData
@@ -157,8 +137,6 @@ export class AuthService {
 
   private guardarToken( idToken: string ) {
     this.userToken = idToken;
-    // console.log('hola');
-    // console.log(this.userToken);
     localStorage.setItem('token', idToken);
 
     let hoy = new Date();
@@ -174,23 +152,14 @@ export class AuthService {
 
   estaAutenticado(): boolean {
     this.leerToken();
-    //console.log('estaAutenticado');
     if ( this.userToken.length < 2 ) {
       return false;
     }
     this.estadoDelToken()
-    //--
-    
-    //--
     if ( this.respuesta === false ) {
-      //console.log('respuesta: '+ this.respuesta);
       return false;
     }
-    //console.log(this.respuesta);
-    //console.log('estaAutenticado2');
     const expira = Number(localStorage.getItem('expira'));
-
-    // console.log('Expira: ' + expira);
 
     const expiraDate = new Date();
     expiraDate.setTime(expira);
@@ -200,7 +169,6 @@ export class AuthService {
     } else {
       return false;
     }
-    // return this.userToken.length > 2;
   }
 
   estadoDelToken() {
@@ -208,21 +176,15 @@ export class AuthService {
       Authorization: `Bearer ${ this.userToken }`
     });
 
-    //console.log('estado Del Token');
     this.http.get(`${ this.url }/usuarios`, { headers, observe: 'response' })
     .subscribe(response => {
-      //console.log('suscrito');
-      //console.log(response.status);
     },
     (err) => {
-      //console.log('HTTP Error', err.status);
-      // this.ruta.navigateByUrl('/login');
       this.logout();
       if (err.status === 0) {
         this.presentDesconectado();
       }
     });
-    //console.log('fuera del suscrito ' + this.respuesta);
     
   }
 
@@ -240,10 +202,8 @@ export class AuthService {
 
   PuedeActivarse(): boolean {
     if ( this.estaAutenticado() ) {
-      //console.log('ok');
       return true;
     } else {
-      //console.log('no ok');
       this.navCtlr.navigateRoot(['/login']);
       this.logout();
       return false;
@@ -259,7 +219,6 @@ export class AuthService {
         {
           text: 'Ok',
           handler: ( data:any ) => {
-            //console.log(data);
             this.navCtlr.navigateRoot(['/login']);
           }
         }

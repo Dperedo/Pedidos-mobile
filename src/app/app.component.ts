@@ -12,11 +12,6 @@ export class AppComponent {
     { title: 'Pedido', url: '/pedido', icon: 'bag' },
     { title: 'Cliente', url: '/cliente', icon: 'person-circle' },
     { title: 'Producto', url: '/producto', icon: 'cube' },
-    // { title: 'Cerrar Sesion', url: '/login', icon: 'backspace' },
-    /*{ title: 'Favorites', url: '/folder/Favorites', icon: 'heart' },
-    { title: 'Archived', url: '/folder/Archived', icon: 'archive' },
-    { title: 'Cerrar Sesion', url: '/login', icon: 'backspace' },
-    { title: 'Spam', url: '/folder/Spam', icon: 'warning' },*/
   ];
 
   login = false;
@@ -34,12 +29,8 @@ export class AppComponent {
   mostrarMenu() {
     if ( this.auth.PuedeActivarse() ) {
       this.login = true;
-      //this.menuCtrl.isOpen();
-      //this.menuCtrl.enable(true, 'authenticated');
     } else {
       this.login = false;
-      //this.menuCtrl.close();
-      //this.menuCtrl.isEnabled();
     }
   }
 
@@ -60,16 +51,13 @@ export class AppComponent {
           role: 'cancel',
           cssClass: 'secondary',
           handler: () => {
-            //console.log('Confirm Cancel');
           }
         }, {
           text: 'Salir',
           handler: ( data:any ) => {
-            //console.log(data);
             this.auth.logout();
             this.mostrarMenu();
             this.navCtlr.navigateRoot(['/login']);
-            //this.mostrarMenu();
           }
         }
       ]
